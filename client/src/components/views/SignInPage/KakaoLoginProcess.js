@@ -8,7 +8,7 @@ function KakaoLoginProcess() {
 
   useEffect(() => {
     const thisUrlParameter = window.location.search;
-    console.log('----------------------------------');
+
     if (thisUrlParameter) {
       const codeArray = thisUrlParameter.split('=');
 
@@ -31,7 +31,6 @@ function KakaoLoginProcess() {
   const grantType = 'grant_type=authorization_code';
 
   const getKakaoToken = () => {
-    console.log('----------------------------------');
     axios
       .post(
         `${hostName}?${grantType}&client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&code=${code.current}`,
