@@ -15,7 +15,7 @@ mongoose
     useFindAndModify: true,
   })
   .then(() => console.log('MongoDB is connected...'))
-  .catch(error => console.error('MongoDB connecting ERROR: ', error));
+  .catch((error) => console.error('MongoDB connecting ERROR: ', error));
 
 app.use(cors());
 
@@ -24,6 +24,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/my-schedule/api/user', require('./routes/user'));
+app.use('/my-schedule/api/schedule', require('./routes/schedule'));
 
 // error handler function
 app.use((error, req, res, next) => {
@@ -34,14 +35,14 @@ app.use('/upload', express.static('upload'));
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
-    // Set static folder
-    // All the javascript and css files will be read and served from this folder
-    app.use(express.static('client/build'));
+  // Set static folder
+  // All the javascript and css files will be read and served from this folder
+  app.use(express.static('client/build'));
 
-    // index.html for all page routes    html or routing and navigation
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
-    });
+  // index.html for all page routes    html or routing and navigation
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
+  });
 }
 
 const PORT = 5000;
