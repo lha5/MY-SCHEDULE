@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
   res.send('Hello, world');
 });
 
-app.use('/duedate/api/user', require('./routes/user'));
+app.use('/my-schedule/api/user', require('./routes/user'));
 
 // error handler function
 app.use((error, req, res, next) => {
