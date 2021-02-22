@@ -2,47 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import styled from 'styled-components';
 import axios from 'axios';
 import swal from 'sweetalert';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  border: 1px solid cyan;
-  margin: 0 auto;
-
-  .nav-bar {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .user-menu {
-    display: flex;
-    flex-direction: row;
-
-    div:nth-child(1) {
-      margin-right: 10px;
-    }
-  }
-
-  @media ${props => props.theme.device.desktop} {
-    width: 85%;
-  }
-
-  @media ${props => props.theme.device.labtop} {
-    width: 80%;
-  }
-
-  @media ${props => props.theme.device.tablet} {
-    width: 85%;
-  }
-
-  @media ${props => props.theme.device.mobile} {
-    width: 85%;
-  }
-`;
 
 function Header() {
   const user = useSelector(state => state.user);
@@ -76,7 +37,7 @@ function Header() {
   }
 
   return (
-    <Container>
+    <div>
       <div className="logo-container">
         <Link to="/">홈</Link>
       </div>
@@ -93,7 +54,7 @@ function Header() {
           <Link to="/signin">로그인</Link>
         </div>
       )}
-    </Container>
+    </div>
   );
 }
 

@@ -1,30 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import styled from 'styled-components';
 import axios from 'axios';
-
-const Container = styled.div`
-  border: 1px solid blue;
-  margin: 0 auto;
-  text-align: center;
-
-  @media ${props => props.theme.device.desktop} {
-    width: 85%;
-  }
-
-  @media ${props => props.theme.device.labtop} {
-    width: 80%;
-  }
-
-  @media ${props => props.theme.device.tablet} {
-    width: 85%;
-  }
-
-  @media ${props => props.theme.device.mobile} {
-    width: 85%;
-  }
-`;
 
 function LandingPage(props) {
   const handleLogout = () => {
@@ -56,9 +33,9 @@ function LandingPage(props) {
   }
 
   return (
-    <Container>
+    <div>
       <h1>랜딩 페이지</h1>
-    </Container>
+    </div>
   );
 }
 

@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import './index.css';
-import { ThemeProvider } from 'styled-components';
-import theme from './assets/style/globalTheme';
 import GlobalStyle from './assets/style/globalStyle';
+import theme from './assets/style/globalTheme';
+import { Global, ThemeProvider } from '@emotion/react';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
@@ -25,7 +25,7 @@ ReactDOM.render(
   >
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <GlobalStyle />
+        <Global styles={GlobalStyle} />
         <App />
       </ThemeProvider>
     </BrowserRouter>

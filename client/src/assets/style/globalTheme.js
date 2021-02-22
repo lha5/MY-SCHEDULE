@@ -1,8 +1,15 @@
 const deviceSize = {
-  mobile: '450px',
-  tablet: '768px',
+  desktop: '1920px',
   labtop: '1024px',
-  desktop: '1920px'
+  tablet: '768px',
+  mobile: '450px'
+};
+
+const device = {
+  desktop: `only screen and (max-width: ${deviceSize.desktop})`,
+  labtop: `only screen and (max-width: ${deviceSize.labtop})`,
+  tablet: `only screen and (max-width: ${deviceSize.tablet})`,
+  mobile: `only screen and (max-width: ${deviceSize.mobile})`
 };
 
 const colors = {
@@ -17,16 +24,9 @@ const colors = {
   darkGray: '#393e46'
 };
 
-const device = {
-  mobile: `only screen and (max-width: ${deviceSize.mobile})`,
-  tablet: `only screen and (max-width: ${deviceSize.tablet})`,
-  labtop: `only screen and (max-width: ${deviceSize.labtop})`,
-  desktop: `only screen and (max-width: ${deviceSize.desktop})`
-};
-
 const theme = {
-  colors,
-  device
+  device,
+  colors
 };
 
 export default theme;

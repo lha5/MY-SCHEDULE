@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components';
+import { css } from '@emotion/react';
 
-const GlobalStyle = createGlobalStyle`
+const GlobalStyle = css`
   * {
     font-family: 'NotoSans';
     font-weight: 300;
