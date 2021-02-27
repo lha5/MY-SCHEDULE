@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
+import Auth from './hoc/auth';
+import SignInPage from './components/views/SignInPage/SignInPage';
 
 import './index.css';
 import { ThemeProvider } from 'styled-components';
@@ -26,7 +29,10 @@ ReactDOM.render(
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <App />
+        <Switch>
+          <Route path="/signin" component={Auth(SignInPage, null)} />
+          <Route component={Auth(App, true)} />
+        </Switch>
       </ThemeProvider>
     </BrowserRouter>
   </Provider>,

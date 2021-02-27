@@ -1,9 +1,48 @@
 import React, { useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 
+import styled from 'styled-components';
 import axios from 'axios';
 
+import titleLogo from '../../../assets/images/title-logo.png'
 import KakaoLogin from './KakaoLogin';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  justify-content: center;
+  height: 100vh;
+
+  div.kakao-login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 100px auto;
+    padding: 20px;
+    width: fit-content;
+    height: calc(100vh - 47px);
+
+    div.title-container {
+      align-items: center;
+    }
+
+    div.welcome {
+      margin-bottom: 70px;
+    }
+  }
+
+  div.bottom-section {
+    width: 100%;
+    text-align: center;
+    padding: 15px 0;
+    margin: 0 auto;
+    font-size: 12px;
+    border-top: 1px solid ${props => props.theme.colors.lightGray};
+    color: ${props => props.theme.colors.darkGray};
+  }
+`;
 
 function SignInPage() {
   const code = useRef();
@@ -69,10 +108,20 @@ function SignInPage() {
   }
 
   return (
-    <div>
-      로그인 영역
-      <KakaoLogin />
-    </div>
+    <Container>
+      <div className="kakao-login-container">
+        <div className="title-container">
+          <img src={titleLogo} alt="마감을 사수하자" />
+        </div>
+        <div className="welcome">
+          <i>당신의 마감을 도와드립니다.</i>
+        </div>
+        <KakaoLogin />
+      </div>
+      <div className="bottom-section">
+        LHA presents. © LHA ALL RIGHTS RESERVED SINCE 2021
+      </div>
+    </Container>
   );
 }
 
