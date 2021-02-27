@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import axios from 'axios';
 import swal from 'sweetalert';
 import { Avatar, Menu, MenuItem } from '@material-ui/core';
