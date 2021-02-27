@@ -1,60 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
-import axios from 'axios';
-import swal from 'sweetalert';
+import styled from '@emotion/styled';
 
-function Header() {
-  const user = useSelector(state => state.user);
+import TitleLogo from '../../../assets/images/title-logo.png';
+import NavBar from './NavBar';
+import UserMenuBar from './UserMenuBar';
 
-  const handleLogout = () => {
-    const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem('user_auth')}` }
-    };
-    const dataToSubmit = {
-      kakao_token: localStorage.getItem('k_')
-    };
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 calc(25%);
+  margin: 0 auto;
+  border-bottom: 1px solid ${props => props.theme.colors.lightGray};
 
-    axios
-      .post(`${process.env.REACT_APP_URI}${process.env.REACT_APP_USER_SERVER}/kakao/logout`, dataToSubmit, config)
-      .then(response => {
-        if (response.status === 200) {
-          localStorage.removeItem('k_');
-          localStorage.removeItem('user_id');
-          localStorage.removeItem('user_auth');
-
-          window.location.replace('/');
-        } else {
-          swal({
-            title: '로그아웃 할 수 없습니다.',
-            text: '잠시 후 다시 시도해주세요.',
-            icon: 'error'
-          });
-        }
-      })
-      .catch(error => console.error('로그아웃 실패:: ', error));
+  div.logo-container {
+    a img {
+      width: 230px;
+    }
   }
 
+  @media ${props => props.theme.device.labtop} {
+    padding: 0 200px;
+  }
+`;
+
+function Header() {
+
   return (
-    <div>
+    <Container>
       <div className="logo-container">
-        <Link to="/">홈</Link>
+        <Link to="/">
+          <img src={TitleLogo} alt="마감을 사수하자" />
+        </Link>
       </div>
-      <div className="nav-bar">
-        <div><Link to="/schedule">스케쥴 관리</Link></div>
-      </div>
-      {user.userData && user.userData.isAuth ? (
-        <div className="user-menu">
-          <div><Link to="/mypage">마이페이지</Link></div>
-          <div onClick={handleLogout}>로그아웃</div>
-        </div>
-      ) : (
-        <div>
-          <Link to="/signin">로그인</Link>
-        </div>
-      )}
-    </div>
+      <NavBar />
+      <UserMenuBar />
+    </Container>
   );
 }
 

@@ -19,7 +19,7 @@ const colors = {
   danger: '#d35d6e',
   white: '#f9f9f9',
   black: '#222831',
-  lightGray: '#bebebe',
+  lightGray: '#dedede',
   gray: '#bbbbbb',
   darkGray: '#393e46'
 };
