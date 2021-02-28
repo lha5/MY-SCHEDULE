@@ -7,6 +7,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: start;
+  align-items: center;
   width: 100%;
   column-gap: 20px;
 `;
@@ -15,7 +16,7 @@ function NavBar() {
   return (
     <Container>
       <div className="menu schedule">
-        <NavLink to="/schedule" activeStyle={{ fontWeight: 500 }}>스케쥴 관리</NavLink>
+        <NavLink to="/schedule" activeClassName="active-menu">스케쥴 관리</NavLink>
       </div>
       <div className="menu challenge">마감 챌린지</div>
     </Container>

@@ -9,6 +9,7 @@ const Container = styled.div`
   align-items: center;
   padding: 15px calc(25%);
   margin: 0 auto;
+  font-size: 13px;
   border-top: 1px solid ${props => props.theme.colors.lightGray};
   color: ${props => props.theme.colors.darkGray};
 `;

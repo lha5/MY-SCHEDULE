@@ -7,7 +7,6 @@ import axios from 'axios';
 import swal from 'sweetalert';
 import { Avatar, Menu, MenuItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { NotificationsOutlined } from '@material-ui/icons';
 
 const Container = styled.div`
   display: flex;
@@ -18,6 +17,10 @@ const Container = styled.div`
       align-items: center;
       column-gap: 10px;
       color: ${props => props.theme.colors.gray};
+
+      div path {
+        color: ${props => props.theme.colors.white};
+      }
 
       div:hover {
         background-color: ${props => props.theme.colors.black};
@@ -64,24 +67,47 @@ function UserMenuBar() {
       kakao_token: localStorage.getItem('k_')
     };
 
-    axios
-      .post(`${process.env.REACT_APP_URI}${process.env.REACT_APP_USER_SERVER}/kakao/logout`, dataToSubmit, config)
-      .then(response => {
-        if (response.status === 200) {
-          localStorage.removeItem('k_');
-          localStorage.removeItem('user_id');
-          localStorage.removeItem('user_auth');
-
-          window.location.replace('/');
-        } else {
-          swal({
-            title: '로그아웃 할 수 없습니다.',
-            text: '잠시 후 다시 시도해주세요.',
-            icon: 'error'
-          });
+    swal({
+      title: '로그아웃 하시겠습니까?',
+      icon: 'warning',
+      buttons: {
+        confirm: {
+          text: "로그아웃",
+          value: true,
+          visible: true,
+          closeModal: true
+        },
+        cancel: {
+          text: "취소",
+          value: false,
+          visible: true,
+          closeModal: true,
         }
-      })
-      .catch(error => console.error('로그아웃 실패:: ', error));
+      }
+    }).then((value) => {
+      if (value) {
+        axios
+          .post(`${process.env.REACT_APP_URI}${process.env.REACT_APP_USER_SERVER}/kakao/logout`, dataToSubmit, config)
+          .then(response => {
+            if (response.status === 200) {
+              localStorage.removeItem('k_');
+              localStorage.removeItem('user_id');
+              localStorage.removeItem('user_auth');
+
+              window.location.replace('/');
+            } else {
+              swal({
+                title: '로그아웃 할 수 없습니다.',
+                text: '잠시 후 다시 시도해주세요.',
+                icon: 'error'
+              });
+            }
+          })
+          .catch(error => console.error('로그아웃 실패:: ', error));
+      } else {
+        return false;
+      }
+    });
   }
 
   const [AnchorEl, setAnchorEl] = React.useState(null);
@@ -99,7 +125,6 @@ function UserMenuBar() {
       {user.userData && user.userData.isAuth ? (
         <div>
           <div className="user-menu" onClick={handleClick}>
-            {/* <NotificationsOutlined fontSize="large" /> */}
             <Avatar src="/broken-image.jpg" />
           </div>
           <StyledMenu
@@ -111,7 +136,7 @@ function UserMenuBar() {
             disableAutoFocusItem
           >
             <MenuItem dense>
-              마이 페이지
+              <Link to="/mypage">마이 페이지</Link>
             </MenuItem>
             <MenuItem dense onClick={handleLogout}>
               로그아웃

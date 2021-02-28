@@ -6,6 +6,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   padding: 0 calc(23%);
+  height: calc(100vh - 71px - 48px);
 `;
 
 function LandingPage() {

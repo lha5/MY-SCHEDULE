@@ -7,8 +7,8 @@ const scheduleController = require('../controller/schedule');
 //        Schedule
 // -------------------------
 
-// router.get('/auth', scheduleController.ooo);
+router.get('/', scheduleController.getMySchedule);
 
-// router.post('/kakao/signin', scheduleController.ooo);
+router.post('/', scheduleController.createSchedule);
 
 module.exports = router;

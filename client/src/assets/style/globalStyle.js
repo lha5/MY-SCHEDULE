@@ -48,6 +48,14 @@ const GlobalStyle = createGlobalStyle`
   button:hover {
     outline: 0;
   }
+
+  .swal-button--confirm {
+    background-color: ${props => props.theme.colors.primary};
+  }
+
+  .swal-button--confirm:hover {
+    background-color: ${props => props.theme.colors.gray};
+  }
 `;
 
 export default GlobalStyle;
