@@ -7,6 +7,9 @@ const scheduleSchema = mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
+  id: {
+    type: String
+  },
   calendarId: {
     type: String
   },
@@ -28,8 +31,11 @@ const scheduleSchema = mongoose.Schema({
   comingDuration: {
     type: Number
   },
+  attendees: {
+    type: Array
+  },
   location: {
-    type: Date
+    type: String
   },
   isAllDay: {
     type: Boolean,
@@ -52,8 +58,14 @@ const scheduleSchema = mongoose.Schema({
   bgColor: {
     type: String
   },
+  borderColor: {
+    type: String
+  },
   dragBgColor: {
     type: String
+  },
+  raw: {
+    type: Object
   },
   state: {
     type: String

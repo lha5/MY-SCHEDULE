@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 import Calendar from '@toast-ui/react-calendar';
@@ -24,6 +24,15 @@ const Container = styled.div`
     .tui-full-calendar-weekday-grid-header {
       text-align: left;
     }
+
+    .tui-full-calendar-weekday-schedule,
+    .tui-full-calendar-weekday-schedule-time {
+      text-align: left;
+    }
+  }
+
+  @media only screen and (max-width: 1400px) {
+    padding: 20px calc(20%);
   }
 
   @media ${props => props.theme.device.labtop} {
@@ -74,11 +83,12 @@ const calendars = [
   },
 ];
 
-function SchedulePage() {
+function SchedulePage({ user }) {
+  const [Schedule, setSchedule] = useState([]);
   const cal = useRef();
 
   useEffect(() => {
-    // 일정 불러오기
+    // cal.current.calendarInst.setCalendars(Schedule);
   }, []);
 
   const onClickSchedule = useCallback((e) => {
@@ -90,7 +100,10 @@ function SchedulePage() {
  
 
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
+    const writer = user && user.userData && user.userData._id;
+
     const schedule = {
+      id: Math.floor(Math.random() * 101) + scheduleData.title,
       calendarId: scheduleData.calendarId,
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
@@ -104,32 +117,28 @@ function SchedulePage() {
       },
       state: scheduleData.state,
     };
-    cal.current.calendarInst.createSchedules([schedule]);
-    // createScehdule(schedule)
-    //   .then(response => {
-    //     console.log('response?? ', response.status, response.data);
-    //   })
-    //   .catch(error => {
-    //     console.error('error occured in SchedulePage.js - onBeforeCreateSchedule ', error);
+    
+    createScehdule({ writer: writer, ...schedule})
+    .then(response => {
+        cal.current.calendarInst.createSchedules([schedule]);   
+      })
+      .catch(error => {
+        console.error('error occured in SchedulePage.js - onBeforeCreateSchedule ', error);
 
-    //     swal({
-    //       title: '일정을 등록할 수 없습니다.',
-    //       text: '잠시 후 다시 시도해주세요'
-    //     });
-    //   });
+        swal({
+          title: '일정을 등록할 수 없습니다.',
+          text: '잠시 후 다시 시도해주세요'
+        });
+      });
   }, []);
 
   const onBeforeDeleteSchedule = useCallback((res) => {
-    console.log(res);
-
     const { id, calendarId } = res.schedule;
 
     cal.current.calendarInst.deleteSchedule(id, calendarId);
   }, []);
 
   const onBeforeUpdateSchedule = useCallback((e) => {
-    console.log(e);
-
     const { schedule, changes } = e;
 
     cal.current.calendarInst.updateSchedule(
@@ -185,17 +194,19 @@ function SchedulePage() {
         <Calendar
           ref={cal}
           view="month"
+          defaultView="month"
           useCreationPopup={true}
           useDetailPopup={true}
           template={templates}
           calendars={calendars}
           isReadOnly={false}
-          disableDblClick={true}
+          disableDblClick={false}
           disableClick={false}
           onClickSchedule={onClickSchedule}
           onBeforeCreateSchedule={onBeforeCreateSchedule}
           onBeforeDeleteSchedule={onBeforeDeleteSchedule}
           onBeforeUpdateSchedule={onBeforeUpdateSchedule}
+          usageStatistics={false}
         />
       </div>
     </Container>
