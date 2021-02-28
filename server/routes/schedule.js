@@ -12,4 +12,8 @@ router.get('/', auth, scheduleController.getMySchedule);
 
 router.post('/', auth, scheduleController.createSchedule);
 
+router.delete('/delete', auth, scheduleController.deleteSchedule);
+
+router.patch('/update', auth, scheduleController.updateSchedule);
+
 module.exports = router;

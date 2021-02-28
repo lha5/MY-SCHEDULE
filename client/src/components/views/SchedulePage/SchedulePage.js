@@ -7,7 +7,12 @@ import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import swal from 'sweetalert';
 
-import { createScehdule } from './../../../apis/scheduleApi';
+import {
+  getMySchedule,
+  createScehdule,
+  deleteSchedule,
+  updateSchedule,
+} from './../../../apis/scheduleApi';
 
 const Container = styled.div`
   padding: 20px calc(23%);
@@ -85,17 +90,29 @@ const calendars = [
 
 function SchedulePage({ user }) {
   const [Schedule, setSchedule] = useState([]);
+
   const cal = useRef();
 
   useEffect(() => {
-    // cal.current.calendarInst.setCalendars(Schedule);
+    getMySchedule()
+      .then(response => {
+        console.log('response?? ', response.data);
+
+        setSchedule(response.data.data);
+      })
+      .catch(error => {
+        console.error('error occured in SchedulePage.js - getMySchedule() ', error);
+
+        swal({
+          title: '일정을 가져올 수 없습니다.',
+          text: '잠시 후 다시 시도해주세요'
+        });
+      });
   }, []);
 
   const onClickSchedule = useCallback((e) => {
     const { calendarId, id } = e.schedule;
     const el = cal.current.calendarInst.getElement(id, calendarId);
-
-    console.log(e, el.getBoundingClientRect());
   }, []);
  
 
@@ -116,6 +133,12 @@ function SchedulePage({ user }) {
         class: scheduleData.raw['class'],
       },
       state: scheduleData.state,
+      attendees: scheduleData.attendees,
+      bgColor: scheduleData.bgColor,
+      body: scheduleData.body,
+      borderColor: scheduleData.borderColor,
+      color: scheduleData.color,
+      dragBgColor: scheduleData.dragBgColor
     };
     
     createScehdule({ writer: writer, ...schedule})
@@ -123,7 +146,7 @@ function SchedulePage({ user }) {
         cal.current.calendarInst.createSchedules([schedule]);   
       })
       .catch(error => {
-        console.error('error occured in SchedulePage.js - onBeforeCreateSchedule ', error);
+        console.error('error occured in SchedulePage.js - createScehdule(dataToSubmit) ', error);
 
         swal({
           title: '일정을 등록할 수 없습니다.',
@@ -135,17 +158,52 @@ function SchedulePage({ user }) {
   const onBeforeDeleteSchedule = useCallback((res) => {
     const { id, calendarId } = res.schedule;
 
-    cal.current.calendarInst.deleteSchedule(id, calendarId);
+    swal({
+      title: '일정을 삭제하시겠습니까?',
+      icon: 'warning',
+      buttons: [ '취소', '확인' ]
+    }).then(value => {
+      if (value) {
+        deleteSchedule(id)
+          .then(response => {
+            cal.current.calendarInst.deleteSchedule(id, calendarId);
+          })
+          .catch(error => {
+            console.error('error occured in SchedulePage.js - deleteSchedule(id) ', error);
+    
+            swal({
+              title: '일정을 삭제할 수 없습니다.',
+              text: '잠시 후 다시 시도해주세요'
+            });
+          });
+      } else {
+        return false;
+      }
+    });
   }, []);
 
   const onBeforeUpdateSchedule = useCallback((e) => {
     const { schedule, changes } = e;
 
-    cal.current.calendarInst.updateSchedule(
-      schedule.id,
-      schedule.calendarId,
-      changes
-    );
+    updateSchedule(schedule.id, changes)
+      .then((response) => {
+        cal.current.calendarInst.updateSchedule(
+          schedule.id,
+          schedule.calendarId,
+          changes
+        );
+      })
+      .catch((error) => {
+        console.error(
+          'error occured in SchedulePage.js - updateSchedule(id, dataToSubmit) ',
+          error
+        );
+
+        swal({
+          title: '일정을 수정할 수 없습니다.',
+          text: '잠시 후 다시 시도해주세요',
+        });
+      });
   }, []);
 
   const _getFormattedTime = (time) => {
@@ -199,6 +257,7 @@ function SchedulePage({ user }) {
           useDetailPopup={true}
           template={templates}
           calendars={calendars}
+          schedules={Schedule}
           isReadOnly={false}
           disableDblClick={false}
           disableClick={false}
