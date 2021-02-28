@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 import moment from 'moment';
+import { ArrowBackIosOutlined, ArrowForwardIosOutlined } from '@material-ui/icons';
 
 import Calendar from '@toast-ui/react-calendar';
 import 'tui-calendar/dist/tui-calendar.css';
@@ -17,32 +18,114 @@ import {
 } from './../../../apis/scheduleApi';
 
 const Container = styled.div`
-  /* border: 1px solid #e5e5e5; */
-  /* border-top: none; */
+  div#menu {
+    padding: 15px 10px;
+    display: grid;
+    grid-template-columns: 0.25fr auto 0.25fr;
 
-  .tui-full-calendar-month-dayname-item {
-    text-align: center;
+    div.menu-navi {
+      display: flex;
+      flex-direction: row;
+      column-gap: 5px;
+
+      button.btn.move-today {
+        border: 1px solid #bbbbbb;
+        border-radius: 20px;
+        background-color: #ffffff;
+        text-align: center;
+        padding: 4px 12px 6px 12px;
+        margin-right: 10px;
+      }
+
+      button.btn.move-day {
+        border: 1px solid #bbbbbb;
+        border-radius: 50%;
+        background-color: #ffffff;
+        text-align: center;
+        padding: 6px 8px;
+
+        svg {
+          font-size: 12px;
+        }
+      }
+
+      .btn.move-day:hover,
+      .btn.move-today:hover {
+        border: 1px solid #393e46;
+        background-color: #ffffff;
+      }
+
+      .btn.move-day:active,
+      .btn.move-today:active {
+        border: 1px solid #393e46;
+        outline: none;
+      }
+
+      .btn.move-day:disabled,
+      .btn.move-today:disabled {
+        background-color: #bbbbbb;
+        border: 1px solid #393e46;
+        color: #393e46;
+      }
+
+      .btn:focus:active,
+      .btn:focus,
+      .btn:active {
+        outline: none;
+      }
+    }
+
+    div.render-range {
+      font-size: 20px;
+      vertical-align: middle;
+    }
+
+    div.select-box {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      select {
+        border: 1px solid #bbbbbb;
+        border-radius: 5px;
+        padding: 3px 7px;
+      }
+    }
   }
 
-  .tui-full-calendar-weekday-grid-header {
-    text-align: left;
-  }
+  div.calendar-container {
+    border: 1px solid #e5e5e5;
+    border-top: none;
 
-  .tui-full-calendar-weekday-schedule,
-  .tui-full-calendar-weekday-schedule-time {
-    text-align: left;
-  }
+    .tui-full-calendar-month-dayname-item {
+      text-align: center;
+      font-size: 15px;
+    }
 
-  .tui-full-calendar-weekday-grid-line:hover {
-    cursor: pointer;
-  }
+    .tui-full-calendar-weekday-grid-header {
+      text-align: left;
+    }
 
-  .tui-full-calendar-section-allday {
-    padding-left: 19px;
-  }
+    .tui-full-calendar-weekday-schedule,
+    .tui-full-calendar-weekday-schedule-time {
+      text-align: left;
+    }
 
-  .tui-full-calendar-confirm {
-    background-color: ${props => props.theme.colors.primary};
+    .tui-full-calendar-weekday-grid-line:hover {
+      cursor: pointer;
+    }
+
+    .tui-full-calendar-section-allday {
+      padding-left: 19px;
+    }
+
+    .tui-full-calendar-confirm {
+      background-color: ${props => props.theme.colors.primary};
+    }
+
+    .tui-full-calendar-weekday-grid-date.tui-full-calendar-weekday-grid-date-decorator {
+      background-color: ${props => props.theme.colors.primary};
+    }
   }
 `;
 
@@ -125,11 +208,6 @@ function Schedule({ user }) {
           text: '잠시 후 다시 시도해주세요'
         });
       });
-  }, []);
-
-  const onClickSchedule = useCallback((e) => {
-    const { calendarId, id } = e.schedule;
-    const el = cal.current.calendarInst.getElement(id, calendarId);
   }, []);
  
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
@@ -267,6 +345,20 @@ function Schedule({ user }) {
     },
     popupUpdate: function() {
       return '업데이트';
+    },
+    milestone(schedule) {
+      return `<span style="color:#fff;background-color: ${schedule.bgColor};">${
+        schedule.title
+      }</span>`;
+    },
+    milestoneTitle() {
+      return 'Milestone';
+    },
+    allday(schedule) {
+      return `${schedule.title}<i class="fa fa-refresh"></i>`;
+    },
+    alldayTitle() {
+      return '종일';
     }
   };
 
@@ -320,6 +412,7 @@ function Schedule({ user }) {
     }
   }
 
+  // 수정해야 함
   const onChangeSelect = (event) => {
     const selected = event.target.value;
 
@@ -331,21 +424,14 @@ function Schedule({ user }) {
   return (
     <Container>
       <div id="menu">
-        <span id="menu-navi">
-          <select onChange={onChangeSelect} value={State.view}>
-            {State.viewModeOptions.map((option, index) => (
-              <option value={option.value} key={index + option.value}>
-                {option.title}
-              </option>
-            ))}
-          </select>
+        <div className="menu-navi">
           <button
             type="button"
             className="btn btn-default btn-sm move-today"
             data-action="move-today"
             onClick={onClickNavi}
           >
-            오늘
+            Today
           </button>
           <button
             type="button"
@@ -353,7 +439,7 @@ function Schedule({ user }) {
             data-action="move-prev"
             onClick={onClickNavi}
           >
-            이전
+            <ArrowBackIosOutlined />
           </button>
           <button
             type="button"
@@ -361,30 +447,41 @@ function Schedule({ user }) {
             data-action="move-next"
             onClick={onClickNavi}
           >
-            이후
+            <ArrowForwardIosOutlined />
           </button>
-        </span>
-        <span className="render-range">{State.dateRange}</span>
+        </div>
+        <div className="render-range">{State.dateRange}</div>
+        <div className="select-box">
+          <select onChange={onChangeSelect} value={State.view}>
+            {State.viewModeOptions.map((option, index) => (
+              <option value={option.value} key={index + option.value}>
+                {option.title}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      <Calendar
-        ref={cal}
-        defaultView="month"
-        view={State.view}
-        useCreationPopup={true}
-        useDetailPopup={true}
-        template={templates}
-        calendars={State.calendars}
-        schedules={Schedule}
-        isReadOnly={false}
-        disableDblClick={false}
-        disableClick={false}
-        onBeforeCreateSchedule={onBeforeCreateSchedule}
-        onBeforeDeleteSchedule={onBeforeDeleteSchedule}
-        onBeforeUpdateSchedule={onBeforeUpdateSchedule}
-        usageStatistics={false}
-        scheduleView={['time']}
-        taskView
-      />
+      <div className="calendar-container">
+        <Calendar
+          ref={cal}
+          defaultView="month"
+          view={State.view}
+          useCreationPopup={true}
+          useDetailPopup={true}
+          template={templates}
+          calendars={State.calendars}
+          schedules={Schedule}
+          isReadOnly={false}
+          disableDblClick={false}
+          disableClick={false}
+          onBeforeCreateSchedule={onBeforeCreateSchedule}
+          onBeforeDeleteSchedule={onBeforeDeleteSchedule}
+          onBeforeUpdateSchedule={onBeforeUpdateSchedule}
+          usageStatistics={false}
+          scheduleView={['time']}
+          taskView
+        />
+      </div>
     </Container>
   );
 }
