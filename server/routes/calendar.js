@@ -10,6 +10,8 @@ const { auth } = require('../middleware/auth');
 
 router.get('/', auth, CalendarController.getMyCalendarTheme);
 
+router.get('/last-no', auth, CalendarController.getLastCalendarId);
+
 router.post('/', auth, CalendarController.createMyCalendarTheme);
 
 router.delete('/delete', auth, CalendarController.deleteCalendarTheme);
