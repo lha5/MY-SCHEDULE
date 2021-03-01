@@ -78,8 +78,9 @@ const Container = styled.div`
     }
 
     div.render-range {
-      font-size: 20px;
+      font-size: 21px;
       vertical-align: middle;
+      font-weight: 500;
     }
 
     div.select-box {

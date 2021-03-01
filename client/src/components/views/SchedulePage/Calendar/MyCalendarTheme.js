@@ -29,13 +29,11 @@ const CustomCheckbox = styled.div`
   }
 
   label {
-    cursor: not-allowed;
     position: absolute;
     display: flex;
     background-color: ${(props) => props.whichColor};
     border: 2px solid ${(props) => props.whichColor};
     border-radius: 50%;
-    cursor: pointer;
     width: 10px;
     height: 10px;
     left: 0;
@@ -63,7 +61,7 @@ function MyCalendarTheme({ CalendarData }) {
 
   const renderTheme = CalendarData && CalendarData.map((theme, index) => (
     <CustomCheckbox key={theme.id + theme.name} whichColor={theme.bgColor}>
-      <input type="checkbox" value={theme.id} id={theme.id + theme.name} />
+      <input type="checkbox" value={theme.id} id={theme.id + theme.name} disabled />
       <label htmlFor={theme.id + theme.name} />
       <div className="theme-tag">{theme.name}</div>
     </CustomCheckbox>

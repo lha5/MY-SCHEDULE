@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
+import MenuOutlinedIcon from '@material-ui/icons/MenuOutlined';
 
 import TitleLogo from '../../../assets/images/title-logo.png';
 import NavBar from './NavBar';
@@ -24,13 +25,28 @@ const Container = styled.div`
     }
   }
 
+  div.menu-hamburger {
+    display: none;
+  }
+
+  @media only screen and (max-width: 1400px) {
+    padding: 0 calc(20%);
+  }
+
   @media ${props => props.theme.device.labtop} {
-    padding: 0 calc(18%);
+    padding: 0 calc(15%);
   }
 
   @media ${props => props.theme.device.tablet} {
-    div:not() {
+    justify-content: center;
+
+    div:not(.logo-container, .menu-hamburger) {
       display: none;
+    }
+
+    div.menu-hamburger {
+      display: block;
+      cursor: pointer;
     }
   }
 `;
@@ -45,6 +61,9 @@ function Header() {
       </div>
       <NavBar />
       <UserMenuBar />
+      <div className="menu-hamburger">
+        <MenuOutlinedIcon />
+      </div>
     </Container>
   );
 }

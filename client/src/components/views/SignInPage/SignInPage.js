@@ -11,6 +11,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+  padding: 0 calc(23%);
   justify-content: center;
   height: calc(100vh - 71px - 48px);
 
@@ -29,6 +30,14 @@ const Container = styled.div`
     div.welcome {
       margin-bottom: 70px;
     }
+  }
+
+  @media only screen and (max-width: 1400px) {
+    padding: 0 calc(20%);
+  }
+
+  @media ${props => props.theme.device.labtop} {
+    padding: 0 calc(15%);
   }
 
   /* div.bottom-section {

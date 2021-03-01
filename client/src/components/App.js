@@ -10,6 +10,7 @@ import SignInPage from './views/SignInPage/SignInPage';
 import LandingPage from './views/LandingPage/LandingPage';
 import MyPage from './views/MyPage/MyPage';
 import SchedulePage from './views/SchedulePage/SchedulePage';
+import ChallengePage from './views/ChallengePage/ChallengePage';
 import Footer from './views/Footer/Footer';
 
 const Wrapper = styled.div`
@@ -26,6 +27,7 @@ function App() {
         <Route path="/signin" component={Auth(SignInPage, false)} />
         <Route exact path="/mypage" component={Auth(MyPage, true)} />
         <Route exact path="/schedule" component={Auth(SchedulePage, true)} />
+        <Route exact path="/challenge" component={Auth(ChallengePage, true)} />
       </Switch>
       <Footer />
     </Wrapper>

@@ -12,6 +12,17 @@ const Container = styled.div`
   font-size: 13px;
   border-top: 1px solid ${props => props.theme.colors.lightGray};
   color: ${props => props.theme.colors.darkGray};
+
+  @media only screen and (max-width: 1400px) {
+    padding: 15px calc(20%);
+  }
+
+  @media ${props => props.theme.device.labtop} {
+    padding: 15px calc(15%);
+  }
+
+  @media ${props => props.theme.device.tablet} {
+  }
 `;
 
 function Footer() {

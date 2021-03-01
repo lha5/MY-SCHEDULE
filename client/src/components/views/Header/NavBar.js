@@ -18,7 +18,9 @@ function NavBar() {
       <div className="menu schedule">
         <NavLink to="/schedule" activeClassName="active-menu">스케쥴 관리</NavLink>
       </div>
-      <div className="menu challenge">마감 챌린지</div>
+      <div className="menu challenge">
+        <NavLink to="/challenge" activeClassName="active-menu">마감 챌린지</NavLink>
+      </div>
     </Container>
   );
 }

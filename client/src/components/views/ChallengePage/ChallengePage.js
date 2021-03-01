@@ -17,12 +17,12 @@ const Container = styled.div`
   }
 `;
 
-function LandingPage() {
+function ChallengePage() {
   return (
     <Container>
-      <h1>랜딩 페이지</h1>
+      마감 챌린지
     </Container>
   );
 }
 
-export default LandingPage;
+export default ChallengePage;
