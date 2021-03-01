@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
-import moment from 'moment';
 import { ArrowBackIosOutlined, ArrowForwardIosOutlined } from '@material-ui/icons';
 
 import Calendar from '@toast-ui/react-calendar';

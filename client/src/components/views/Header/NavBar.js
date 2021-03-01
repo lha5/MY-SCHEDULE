@@ -10,6 +10,10 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   column-gap: 20px;
+
+  .active-menu {
+    color: ${props => props.theme.colors.primary};
+  }
 `;
 
 function NavBar() {

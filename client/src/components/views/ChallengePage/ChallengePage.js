@@ -2,9 +2,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import Challenging from './Challenging';
+import Challenged from './Challenged';
+
 const Container = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  row-gap: 25px;
   padding: 0 calc(23%);
   height: calc(100vh - 71px - 48px);
 
@@ -20,7 +24,8 @@ const Container = styled.div`
 function ChallengePage() {
   return (
     <Container>
-      마감 챌린지
+      <Challenging />
+      <Challenged />
     </Container>
   );
 }

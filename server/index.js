@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 app.use('/my-schedule/api/user', require('./routes/user'));
 app.use('/my-schedule/api/schedule', require('./routes/schedule'));
 app.use('/my-schedule/api/calendar', require('./routes/calendar'));
+app.use('/my-schedule/api/challenge', require('./routes/challenge'));
 
 // error handler function
 app.use((error, req, res, next) => {
