@@ -14,4 +14,6 @@ router.post('/kakao/signin', userController.kakaoSigninUser);
 
 router.post('/kakao/logout', auth, userController.kakaoLogoutUser);
 
+router.patch('/update', auth, userController.editMyName);
+
 module.exports = router;

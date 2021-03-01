@@ -159,3 +159,26 @@ exports.kakaoLogoutUser = async (req, res, next) => {
     next(error);
   }
 }
+
+exports.editMyName = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+
+    const userName = req.body;
+
+    User.findOneAndUpdate(
+      { _id: userId },
+      { name: userName.name },
+      { rawResult: true },
+      (err, doc) => {
+        if (err) {
+          return res.status(500).json({ success: false, message: 'fail to update user name', err });
+        }
+
+        res.status(200).json({ success: true });
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+}

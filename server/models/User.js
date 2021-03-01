@@ -32,6 +32,10 @@ const userSchema = mongoose.Schema({
   },
   connectedAt: {
     type: Date
+  },
+  inactive: {
+    type: Boolean,
+    default: true
   }
 }, { timestamps: true });
 
