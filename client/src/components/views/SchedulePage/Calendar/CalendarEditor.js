@@ -8,17 +8,17 @@ import { DeleteOutlined } from '@material-ui/icons';
 import { getLastId, createCalendarTheme, getCalendarTheme, deleteCalendarTheme } from '../../../../apis/calendarApi';
 
 const Container = styled.div`
-  width: 900px;
-  height: 500px;
+  width: 600px;
+  height: 550px;
   background-color: ${props => props.theme.colors.white};
   border-radius: 5px;
   display: grid;
-  grid-template-columns: 0.4fr 1fr;
+  grid-template-columns: 0.7fr 1fr;
   justify-content: space-between;
 
   div.delete-list,
   div.form-section  {
-    margin: 10px 12px;
+    margin: 5px 12px;
   }
 
   div.delete-list {
@@ -27,6 +27,49 @@ const Container = styled.div`
     border-right: 1px solid ${props => props.theme.colors.gray};
     height: auto;
     justify-content: start;
+  }
+
+  div.form-section {
+    form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      row-gap: 25px;
+      margin-top: 20px;
+
+      input[type="text"] {
+        width: 250px;
+        padding: 0.5em;
+        border: none;
+        background-color: ${props => props.theme.colors.white};
+        border-bottom: 1px solid ${props => props.theme.colors.darkGray};
+      }
+
+      button {
+        background-color: ${props => props.theme.colors.white};
+        border: 1px solid ${props => props.theme.colors.darkGray};
+        border-radius: 5px;
+        padding: 0.8em 1em;
+        color: ${props => props.theme.colors.darkGray};
+      }
+
+      .how-to {
+        font-size: 16px;
+        font-weight: 500;
+        margin: 20px auto 0 auto;
+        width: 100%;
+        text-align: left;
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+        
+        .gesture {
+          font-size: 22px;
+          margin-right: 10px;
+        }
+      }
+    }
   }
 `;
 
@@ -70,6 +113,19 @@ const MyTheme = styled.div`
         cursor: pointer;
       }
     }
+  }
+`;
+
+const TryAddYours = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .gesture {
+    font-size: 36px;
+    margin: 10px auto;
   }
 `;
 
@@ -196,20 +252,33 @@ function CalendarEditor({ setCalendarData }) {
     </MyTheme>
   ));
 
+  const renderNotice = () => {
+    return (
+      <TryAddYours>
+        <div className="gesture">👉</div>
+        <div className="notice">
+          오른쪽에서<br/> 일정 구분을<br/> 추가하세요!
+        </div>
+      </TryAddYours>
+    );
+  }
+
   return (
     <Container>
-      <div className="delete-list">{renderList}</div>
+      <div className="delete-list">{CalTheme.length > 0 ? renderList : renderNotice()}</div>
       <div className="form-section">
         <form onSubmit={createTheme}>
-          <input type="hidden" value={1} />
+          <div className="how-to"><span className="gesture">☝️</span> 일정을 구분할 이름을 입력하세요.</div>
           <input
             type="text"
             name="name"
             placeholder="일정 구분. 예: 기념일"
             onChange={handleName}
           />
+          <div className="how-to"><span className="gesture">✌️</span> 일정을 구분할 색상을 선택하세요.</div>
           <CirclePicker color={Background} onChange={handleChangeColor} />
-          <button type="submit">테마 추가하기</button>
+          <div className="how-to"><span className="gesture">🤟</span> 추가하기 버튼을 누르면 끝!</div>
+          <button type="submit">일정 구분 추가하기</button>
         </form>
       </div>
     </Container>
