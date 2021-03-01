@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import { makeStyles, Modal, Backdrop, Fade } from '@material-ui/core';
 import { AddOutlined } from '@material-ui/icons';
+import swal from 'sweetalert';
+
+import { getCalendarTheme } from '../../../../apis/calendarApi';
 
 import MyCalendarTheme from './MyCalendarTheme';
 import CalendarEditor from './CalendarEditor';
@@ -49,6 +52,12 @@ function Calendar({ user }) {
   const classes = useStyles();
   
   const [Open, setOpen] = useState(false);
+  const [CalendarData, setCalendarData] = useState([]);
+
+  useEffect(() => {
+    getCalendarData();
+  }, []);
+
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -58,9 +67,24 @@ function Calendar({ user }) {
     setOpen(false);
   }
 
+  const getCalendarData = () => {
+    getCalendarTheme()
+      .then(response => {
+        setCalendarData(response.data.data);
+      })
+      .catch(error => {
+        console.error('error occured in MyCalendarTheme.js - getCalendarTheme() ', error);
+
+        swal({
+          title: '캘린더 테마를 불러올 수 없습니다.',
+          icon: 'error'
+        });
+      });
+  }
+
   return (
     <Container>
-      <MyCalendarTheme user={user} />
+      <MyCalendarTheme user={user} CalendarData={CalendarData} />
       <button
         type="button"
         onClick={handleOpenModal}
@@ -84,7 +108,7 @@ function Calendar({ user }) {
         }}
       >
         <Fade in={Open} disableStrictModeCompat={true}>
-          <CalendarEditor setOpen={setOpen} user={user} />
+          <CalendarEditor setOpen={setOpen} user={user} setCalendarData={setCalendarData} />
         </Fade>
       </Modal>
     </Container>

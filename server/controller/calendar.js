@@ -56,7 +56,13 @@ exports.deleteCalendarTheme = async (req, res, next) => {
 
     const id = req.query.id;
 
-    res.status(200).json({ success: true });
+    Calendar.findOneAndDelete({ writer: user, id: id }, (err, doc) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'fail to delete calendar', err });
+      }
+      
+      res.status(200).json({ success: true });
+    });
   } catch (error) {
     next(error);
   }

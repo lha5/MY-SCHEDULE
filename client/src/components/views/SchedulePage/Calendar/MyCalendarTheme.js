@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
-import swal from 'sweetalert';
-
-import { getCalendarTheme } from '../../../../apis/calendarApi';
 
 const Container = styled.div`
   display: flex;
@@ -62,27 +59,7 @@ const CustomCheckbox = styled.div`
   }
 `;
 
-function MyCalendarTheme({ user }) {
-  const [CalendarData, setCalendarData] = useState([]);
-
-  useEffect(() => {
-    getCalendarData();
-  }, []);
-
-  const getCalendarData = () => {
-    getCalendarTheme()
-      .then(response => {
-        setCalendarData(response.data.data);
-      })
-      .catch(error => {
-        console.error('error occured in MyCalendarTheme.js - getCalendarTheme() ', error);
-
-        swal({
-          title: '캘린더 테마를 불러올 수 없습니다.',
-          icon: 'error'
-        });
-      });
-  }
+function MyCalendarTheme({ user, CalendarData }) {  
 
   const renderTheme = CalendarData && CalendarData.map((theme, index) => (
     <CustomCheckbox key={theme.id + theme.name} whichColor={theme.bgColor}>
