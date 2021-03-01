@@ -7,7 +7,7 @@ const calendarSchema = mongoose.Schema({
     ref: 'User'
   },
   id: {
-    type: String
+    type: Number
   },
   name: {
     type: String

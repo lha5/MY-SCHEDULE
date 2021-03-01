@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 import { makeStyles, Modal, Backdrop, Fade } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 import MyCalendarTheme from './MyCalendarTheme';
 import CalendarEditor from './CalendarEditor';
@@ -15,11 +16,37 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Container = styled.div`
-  border: 1px solid red;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 5px;
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid ${props => props.theme.colors.gray};
+    background-color: ${props => props.theme.colors.white};
+    
+    svg, path {
+      color: ${props => props.theme.colors.gray};
+    }
+
+    &:hover {
+      border: 2px solid ${props => props.theme.colors.darkGray};
+
+      svg, path {
+        color: ${props => props.theme.colors.darkGray};
+      }
+    }
+  }
 `;
 
 function Calendar({ user }) {
   const classes = useStyles();
+  
   const [Open, setOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -32,9 +59,9 @@ function Calendar({ user }) {
 
   return (
     <Container>
-      <MyCalendarTheme />
-      <button type="button" onClick={handleOpenModal}>
-        달력 테마 편집
+      <MyCalendarTheme user={user} />
+      <button type="button" onClick={handleOpenModal} title="달력 분류 편집하기">
+        <AddIcon />
       </button>
       <Modal
         aria-labelledby="transition-modal-title"
@@ -48,8 +75,8 @@ function Calendar({ user }) {
           timeout: 500,
         }}
       >
-        <Fade in={Open}>
-          <CalendarEditor />
+        <Fade in={Open} disableStrictModeCompat={true}>
+          <CalendarEditor setOpen={setOpen} user={user} />
         </Fade>
       </Modal>
     </Container>

@@ -84,6 +84,7 @@ const Container = styled.div`
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      visibility: hidden;
 
       select {
         border: 1px solid #bbbbbb;
@@ -125,6 +126,10 @@ const Container = styled.div`
 
     .tui-full-calendar-weekday-grid-date.tui-full-calendar-weekday-grid-date-decorator {
       background-color: ${props => props.theme.colors.primary};
+    }
+
+    .tui-full-calendar-extra-date .tui-full-calendar-weekday-grid-date {
+      color: ${props => props.theme.colors.gray};
     }
   }
 `;
@@ -193,12 +198,10 @@ function Schedule({ user }) {
 
   const cal = useRef();
 
-  useEffect(() => {
+  const getSchedule = () => {
     getMySchedule()
       .then(response => {
         setSchedule(response.data.data);
-
-        setRenderRangeText();
       })
       .catch(error => {
         console.error('error occured in SchedulePage.js - getMySchedule() ', error);
@@ -208,6 +211,11 @@ function Schedule({ user }) {
           text: '잠시 후 다시 시도해주세요'
         });
       });
+  }
+
+  useEffect(() => {
+    getSchedule();
+    setRenderRangeText();
   }, []);
  
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
@@ -240,7 +248,9 @@ function Schedule({ user }) {
       .then(response => {
         delete mySchedule.writer;
 
-        cal.current.calendarInst.createSchedules([mySchedule]);   
+        cal.current.calendarInst.createSchedules([mySchedule]);
+        
+        getSchedule();
       })
       .catch(error => {
         console.error('error occured in SchedulePage.js - createScehdule(dataToSubmit) ', error);
@@ -264,6 +274,8 @@ function Schedule({ user }) {
         deleteSchedule(id)
           .then(response => {
             cal.current.calendarInst.deleteSchedule(id, calendarId);
+
+            getSchedule();
           })
           .catch(error => {
             console.error('error occured in SchedulePage.js - deleteSchedule(id) ', error);
@@ -282,6 +294,11 @@ function Schedule({ user }) {
   const onBeforeUpdateSchedule = useCallback((e) => {
     const { schedule, changes } = e;
 
+    if (changes.end || changes.start) {
+      changes.end = changes.end._date;
+      changes.start = changes.start._date;
+    }
+
     updateSchedule(schedule.id, changes)
       .then((response) => {
         cal.current.calendarInst.updateSchedule(
@@ -289,6 +306,8 @@ function Schedule({ user }) {
           schedule.calendarId,
           changes
         );
+
+        getSchedule();
       })
       .catch((error) => {
         console.error(
@@ -412,14 +431,13 @@ function Schedule({ user }) {
     }
   }
 
-  // 수정해야 함
+  // 수정해야 함 --------------------------------------------
   const onChangeSelect = (event) => {
-    const selected = event.target.value;
-
-    setState({ ...State, view: selected });
+    setState({ ...State, view: event.target.value });
     
     setRenderRangeText();
   }
+  // 수정해야 함 --------------------------------------------
 
   return (
     <Container>
@@ -464,15 +482,13 @@ function Schedule({ user }) {
       <div className="calendar-container">
         <Calendar
           ref={cal}
-          defaultView="month"
           view={State.view}
           useCreationPopup={true}
           useDetailPopup={true}
           template={templates}
           calendars={State.calendars}
           schedules={Schedule}
-          isReadOnly={false}
-          disableDblClick={false}
+          disableDblClick={true}
           disableClick={false}
           onBeforeCreateSchedule={onBeforeCreateSchedule}
           onBeforeDeleteSchedule={onBeforeDeleteSchedule}
