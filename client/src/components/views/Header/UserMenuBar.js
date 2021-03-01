@@ -90,8 +90,8 @@ function UserMenuBar() {
           .post(`${process.env.REACT_APP_URI}${process.env.REACT_APP_USER_SERVER}/kakao/logout`, dataToSubmit, config)
           .then(response => {
             if (response.status === 200) {
+              // localStorage.removeItem('user_id');
               localStorage.removeItem('k_');
-              localStorage.removeItem('user_id');
               localStorage.removeItem('user_auth');
 
               window.location.replace('/');

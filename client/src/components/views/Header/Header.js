@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import MenuOutlinedIcon from '@material-ui/icons/MenuOutlined';
 
-import TitleLogo from '../../../assets/images/title-logo.png';
+import TitleLogo from '../../../assets/images/title.png';
 import NavBar from './NavBar';
 import UserMenuBar from './UserMenuBar';
 
@@ -13,15 +13,16 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 calc(23%);
+  padding: 7px calc(23%);
   margin: 0 auto;
   border-bottom: 1px solid ${props => props.theme.colors.lightGray};
 
   div.logo-container {
-    margin-right: 15px;
+    margin-right: 20px;
 
     a img {
-      width: 230px;
+      display: block;
+      height: 50px;
     }
   }
 

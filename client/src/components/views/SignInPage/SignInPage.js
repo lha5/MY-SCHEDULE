@@ -94,7 +94,7 @@ function SignInPage() {
             )
             .then((response) => {
               if (response.status === 200) {
-                localStorage.setItem('user_id', response.data.user_id);
+                // localStorage.setItem('user_id', response.data.user_id);
                 localStorage.setItem('user_auth', response.data.user_auth);
                 localStorage.setItem('k_', response.data.k_);
 

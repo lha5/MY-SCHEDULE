@@ -48,7 +48,7 @@ const Container = styled.div`
   }
 `;
 
-function Calendar({ user }) {
+function Calendar() {
   const classes = useStyles();
   
   const [Open, setOpen] = useState(false);
@@ -84,11 +84,11 @@ function Calendar({ user }) {
 
   return (
     <Container>
-      <MyCalendarTheme user={user} CalendarData={CalendarData} />
+      <MyCalendarTheme CalendarData={CalendarData} />
       <button
         type="button"
         onClick={handleOpenModal}
-        data-tip="달력 분류 편집"
+        data-tip="일정 구분 편집"
         data-effect="solid"
         data-place="left"
       >
@@ -108,7 +108,7 @@ function Calendar({ user }) {
         }}
       >
         <Fade in={Open} disableStrictModeCompat={true}>
-          <CalendarEditor setOpen={setOpen} user={user} setCalendarData={setCalendarData} />
+          <CalendarEditor setOpen={setOpen} setCalendarData={setCalendarData} />
         </Fade>
       </Modal>
     </Container>

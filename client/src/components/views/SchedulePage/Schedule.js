@@ -199,7 +199,7 @@ function Schedule({ user }) {
   }, [View])
  
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
-    const writer = user && user.userData && user.userData._id;
+    const writer = user && user.userData ? user.userData._id : '';
 
     const mySchedule = {
       writer: writer,

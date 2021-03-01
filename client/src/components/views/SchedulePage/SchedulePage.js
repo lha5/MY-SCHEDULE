@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
@@ -22,12 +22,11 @@ const Container = styled.div`
 `;
 
 function SchedulePage({ user }) {
-  const [Filter, setFilter] = useState([]);
 
   return (
     <Container>
-      <Calendar user={user} Filter={Filter} setFilter={setFilter} />
-      <Schedule user={user} Filter={Filter} />
+      <Calendar />
+      <Schedule user={user} />
     </Container>
   );
 }
