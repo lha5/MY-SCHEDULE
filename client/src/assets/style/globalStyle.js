@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
     text-align: center;
     margin: 0;
     padding: 0;
+    overflow-y: scroll;
   }
   
   a {

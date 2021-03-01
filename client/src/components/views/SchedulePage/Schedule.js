@@ -17,6 +17,8 @@ import {
   updateSchedule,
 } from './../../../apis/scheduleApi';
 
+import { getCalendarTheme } from './../../../apis/calendarApi';
+
 const Container = styled.div`
   div#menu {
     padding: 15px 10px;
@@ -84,7 +86,6 @@ const Container = styled.div`
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      visibility: hidden;
 
       select {
         border: 1px solid #bbbbbb;
@@ -97,6 +98,10 @@ const Container = styled.div`
   div.calendar-container {
     border: 1px solid #e5e5e5;
     border-top: none;
+
+    .tui-full-calendar-dropdown-menu {
+      text-align: left;
+    }
 
     .tui-full-calendar-month-dayname-item {
       text-align: center;
@@ -134,67 +139,21 @@ const Container = styled.div`
   }
 `;
 
-const calendars = [
-  {
-    id: '1',
-    name: '작업',
-    color: '#ffffff',
-    bgColor: '#ff75a0',
-    dragBgColor: '#ff75a0',
-    borderColor: '#ff75a0',
-  },
-  {
-    id: '2',
-    name: '미팅',
-    color: '#ffffff',
-    bgColor: '#fce38a',
-    dragBgColor: '#fce38a',
-    borderColor: '#fce38a',
-  },
-  {
-    id: '3',
-    name: '업무',
-    color: '#ffffff',
-    bgColor: '#eaffd0',
-    dragBgColor: '#eaffd0',
-    borderColor: '#eaffd0',
-  },
-  {
-    id: '4',
-    name: '약속',
-    color: '#ffffff',
-    bgColor: '#95e1d3',
-    dragBgColor: '#95e1d3',
-    borderColor: '#95e1d3',
-  },
-  {
-    id: '5',
-    name: '행사',
-    color: '#ffffff',
-    bgColor: '#a4ebf3',
-    dragBgColor: '#a4ebf3',
-    borderColor: '#a4ebf3',
-  },
-];
-
 function Schedule({ user }) {
   const [Schedule, setSchedule] = useState([]);
-
-  const [State, setState] = useState({
-    dateRange: '',
-    view: 'month',
-    viewModeOptions: [
-      {
-        title: '먼슬리',
-        value: 'month'
-      },
-      {
-        title: '위클리',
-        value: 'week'
-      }
-    ],
-    calendars: calendars
-  });
+  const [View, setView] = useState('month');
+  const [ViewModeOptions, setViewModeOptions] = useState([
+    {
+      title: '먼슬리',
+      value: 'month'
+    },
+    {
+      title: '위클리',
+      value: 'week'
+    }
+  ]);
+  const [Calendars, setCalendars] = useState([]);
+  const [DateRange, setDateRange] = useState('');
 
   const cal = useRef();
 
@@ -213,10 +172,30 @@ function Schedule({ user }) {
       });
   }
 
+  const getCalendar = () => {
+    getCalendarTheme()
+      .then(response => {
+        setCalendars(response.data.data);
+      })
+      .catch(error => {
+        console.error('error occured in SchedulePage.js - getMySchedule() ', error);
+
+        swal({
+          title: '일정을 가져올 수 없습니다.',
+          text: '잠시 후 다시 시도해주세요'
+        });
+      });
+  }
+
   useEffect(() => {
     getSchedule();
+    getCalendar();
     setRenderRangeText();
   }, []);
+
+  useEffect(() => {
+    setRenderRangeText();
+  }, [View])
  
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
     const writer = user && user.userData && user.userData._id;
@@ -395,7 +374,7 @@ function Schedule({ user }) {
 
     switch (view) {
       case 'month':
-        dateRangeText = `${year}-${month}`;
+        dateRangeText = `${year}년 ${month}월`;
         break;
       case 'week':
         year = rangeStart.getFullYear();
@@ -404,19 +383,19 @@ function Schedule({ user }) {
         endMonth = rangeEnd.getMonth() + 1;
         endDate = rangeEnd.getDate();
 
-        start = `${year}-${month < 10 ? '0' : ''}${month}-${
+        start = `${year}년 ${month < 10 ? '0' : ''}${month}월 ${
           date < 10 ? '0' : ''
-        }${date}`;
-        end = `${year}-${endMonth < 10 ? '0' : ''}${endMonth}-${
+        }${date}일`;
+        end = `${year}년 ${endMonth < 10 ? '0' : ''}${endMonth}월 ${
           endDate < 10 ? '0' : ''
-        }${endDate}`;
-        dateRangeText = `${start} ~ ${end}`;
+        }${endDate}일`;
+        dateRangeText = `${start} - ${end}`;
         break;
       default:
-        dateRangeText = `${year}-${month}-${date}`;
+        dateRangeText = `${year}년 ${month}월 ${date}일`;
     }
 
-    setState({ ...State, dateRange: dateRangeText });
+    setDateRange(dateRangeText);
   }
 
   const onClickNavi = (event) => {
@@ -431,13 +410,11 @@ function Schedule({ user }) {
     }
   }
 
-  // 수정해야 함 --------------------------------------------
   const onChangeSelect = (event) => {
-    setState({ ...State, view: event.target.value });
+    setView(event.target.value);
     
     setRenderRangeText();
   }
-  // 수정해야 함 --------------------------------------------
 
   return (
     <Container>
@@ -468,10 +445,10 @@ function Schedule({ user }) {
             <ArrowForwardIosOutlined />
           </button>
         </div>
-        <div className="render-range">{State.dateRange}</div>
+        <div className="render-range">{DateRange}</div>
         <div className="select-box">
-          <select onChange={onChangeSelect} value={State.view}>
-            {State.viewModeOptions.map((option, index) => (
+          <select onChange={onChangeSelect} value={View}>
+            {ViewModeOptions.map((option, index) => (
               <option value={option.value} key={index + option.value}>
                 {option.title}
               </option>
@@ -482,11 +459,11 @@ function Schedule({ user }) {
       <div className="calendar-container">
         <Calendar
           ref={cal}
-          view={State.view}
+          view={View}
           useCreationPopup={true}
           useDetailPopup={true}
           template={templates}
-          calendars={State.calendars}
+          calendars={Calendars}
           schedules={Schedule}
           disableDblClick={true}
           disableClick={false}

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
 import styled from 'styled-components';
+import ReactTooltip from 'react-tooltip';
 import { makeStyles, Modal, Backdrop, Fade } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { AddOutlined } from '@material-ui/icons';
 
 import MyCalendarTheme from './MyCalendarTheme';
 import CalendarEditor from './CalendarEditor';
@@ -60,9 +61,16 @@ function Calendar({ user }) {
   return (
     <Container>
       <MyCalendarTheme user={user} />
-      <button type="button" onClick={handleOpenModal} title="달력 분류 편집하기">
-        <AddIcon />
+      <button
+        type="button"
+        onClick={handleOpenModal}
+        data-tip="달력 분류 편집"
+        data-effect="solid"
+        data-place="left"
+      >
+        <AddOutlined />
       </button>
+      <ReactTooltip />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
