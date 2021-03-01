@@ -136,13 +136,13 @@ function CalendarEditor({ setCalendarData }) {
 
   useEffect(() => {
     getTheme();
-    setCalendarData(CalTheme);
   }, [CalTheme]);
 
   const getTheme = () => {
     getCalendarTheme()
       .then(response => {
         setCalTheme(response.data.data);
+        setCalendarData(CalTheme);
       })
       .catch(error => {
         console.error('error occured in MyCalendarTheme.js - getCalendarTheme() ', error);
@@ -155,9 +155,7 @@ function CalendarEditor({ setCalendarData }) {
   }
 
   const handleName = (event) => {
-    const value = event.target.value;
-
-    setName(value);
+    setName(event.target.value);
   }
 
   const handleChangeColor = (color, event) => {
@@ -194,6 +192,8 @@ function CalendarEditor({ setCalendarData }) {
     
         createCalendarTheme(dataToSubmit)
           .then(response => {
+            setName('');
+            setBackground('');
             getTheme();
           })
           .catch(error => {
@@ -274,6 +274,7 @@ function CalendarEditor({ setCalendarData }) {
             name="name"
             placeholder="일정 구분. 예: 기념일"
             onChange={handleName}
+            defaultValue={Name}
           />
           <div className="how-to"><span className="gesture">✌️</span> 일정을 구분할 색상을 선택하세요.</div>
           <CirclePicker color={Background} onChange={handleChangeColor} />
