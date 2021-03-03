@@ -11,6 +11,7 @@ import LandingPage from './views/LandingPage/LandingPage';
 import MyPage from './views/MyPage/MyPage';
 import SchedulePage from './views/SchedulePage/SchedulePage';
 import ChallengePage from './views/ChallengePage/ChallengePage';
+import DetailChallenge from './views/ChallengePage/DetailChallenge';
 import Footer from './views/Footer/Footer';
 
 const Wrapper = styled.div`
@@ -28,6 +29,7 @@ function App() {
         <Route exact path="/mypage" component={Auth(MyPage, true)} />
         <Route exact path="/schedule" component={Auth(SchedulePage, true)} />
         <Route exact path="/challenge" component={Auth(ChallengePage, true)} />
+        <Route exact path="/challenge/:id" component={Auth(DetailChallenge, true)} />
       </Switch>
       <Footer />
     </Wrapper>

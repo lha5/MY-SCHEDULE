@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { AddOutlined, SentimentDissatisfiedOutlined as NotSmile } from '@material-ui/icons';
@@ -130,7 +131,7 @@ const ChallengeDoing = styled.div`
   }
 `;
 
-function Challenging({ Challenge, user, setIsSaveChallenge }) {
+function Challenging({ Challenge, user, setIsSaveChallenge, HowManyDone }) {
   const classes = useStyles();
 
   const [Open, setOpen] = useState(false);
@@ -161,11 +162,14 @@ function Challenging({ Challenge, user, setIsSaveChallenge }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const arr1 = Array.from({ length: ChallengeInfo.goal }, (v, i) => i);
+    const arr2 = Array.from({ length: ChallengeInfo.goal }, (v, i) => false);
+
     const dataToSubmit = {
       writer: user && user.userData ? user.userData._id : '',
       title: ChallengeInfo.title,
-      goal: ChallengeInfo.goal,
-      done: [],
+      goal: arr1,
+      done: arr2,
       dueDate: ChallengeInfo.dueDate,
       memo: ChallengeInfo.memo
     };
@@ -258,15 +262,19 @@ function Challenging({ Challenge, user, setIsSaveChallenge }) {
   const renderChallenging = () => {
     return (
       <ChallengeDoing>
-        <div className="c-title">
-          {Challenge[0].title} (
-          {Challenge[0].done === 0 ? '0' : Challenge[0].done}/
-          {Challenge[0].goal})
-        </div>
-        <div className="c-due-date">
-          ~{' '}
-          {moment(Challenge[0].dueDate).format('YYYY[년] MM[월] DD[일] hh:mm')}
-        </div>
+        <Link to={`/challenge/${Challenge[0]._id}`}>
+          <div className="c-title">
+            {Challenge[0].title} (
+            {HowManyDone === 0 ? '0' : HowManyDone}/
+            {Challenge[0].goal.length})
+          </div>
+          <div className="c-due-date">
+            ~{' '}
+            {moment(Challenge[0].dueDate).format(
+              'YYYY[년] MM[월] DD[일] hh:mm'
+            )}
+          </div>
+        </Link>
       </ChallengeDoing>
     );
   }

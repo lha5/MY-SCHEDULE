@@ -17,3 +17,11 @@ export function getChallenging() {
 export function createChallenge(dataToSubmit) {
   return axios.post(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CHALLENGE_SERVER}`, dataToSubmit, config());
 }
+
+export function getMyChallenge(challengeId) {
+  return axios.get(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CHALLENGE_SERVER}/detail?id=${challengeId}`, config());
+}
+
+export function updateMyChallenge(challengeId, dataToSubmit) {
+  return axios.patch(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CHALLENGE_SERVER}?id=${challengeId}`, dataToSubmit, config());
+}

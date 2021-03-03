@@ -27,6 +27,7 @@ const Container = styled.div`
 function ChallengePage({ user }) {
   const [Challenge, setChallenge] = useState([]);
   const [IsSaveChallenge, setIsSaveChallenge] = useState(false);
+  const [HowManyDone, setHowManyDone] = useState(0);
 
   useEffect(() => {
     getChallenge();
@@ -38,6 +39,8 @@ function ChallengePage({ user }) {
     getChallenging()
       .then(response => {
         setChallenge(response.data.data);
+
+        setHowManyDone(response.data.data[0].done.filter(element => element === true).length);
       })
       .catch(error => {
         console.error('error occured in Challenging - getChallenge() ', error);
@@ -51,7 +54,7 @@ function ChallengePage({ user }) {
 
   return (
     <Container>
-      <Challenging Challenge={Challenge} user={user} setIsSaveChallenge={setIsSaveChallenge} />
+      <Challenging Challenge={Challenge} user={user} setIsSaveChallenge={setIsSaveChallenge} HowManyDone={HowManyDone} />
       <Challenged />
     </Container>
   );

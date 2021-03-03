@@ -8,12 +8,14 @@ const { auth } = require('../middleware/auth');
 //        Calendar
 // -------------------------
 
-router.get('/:id', auth, ChallengeContoller.getMyChallenging);
+router.get('/', auth, ChallengeContoller.getMyChallenging);
+
+router.get('/detail', auth, ChallengeContoller.getMyChallenge);
 
 router.get('/', auth, ChallengeContoller.getMyAllChallenge);
 
 router.post('/', auth, ChallengeContoller.createChallenge);
 
-router.patch('/:id', auth, ChallengeContoller.updateMyChallenging);
+router.patch('/', auth, ChallengeContoller.updateMyChallenging);
 
 module.exports = router;

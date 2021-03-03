@@ -13,7 +13,7 @@ const challengeSchema = mongoose.Schema({
     type: String
   },
   goal: {
-    type: Number
+    type: Array
   },
   done: {
     type: Array
