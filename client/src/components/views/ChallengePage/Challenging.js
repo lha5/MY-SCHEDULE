@@ -283,7 +283,7 @@ function Challenging({ Challenge, user, setIsSaveChallenge, HowManyDone }) {
     <Container>
       <div className="section-title">
         <div className="challenging">진행 중인 챌린지</div>
-        {Challenge.length <= 0 && (
+        {Challenge && Challenge.length <= 0 && (
           <button
             type="button"
             data-tip="챌린지 만들기"

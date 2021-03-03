@@ -11,7 +11,7 @@ const config = () => {
 }
 
 export function getChallenging() {
-  return axios.get(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CHALLENGE_SERVER}`, config());
+  return axios.get(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CHALLENGE_SERVER}/challenging`, config());
 }
 
 export function createChallenge(dataToSubmit) {
@@ -20,6 +20,10 @@ export function createChallenge(dataToSubmit) {
 
 export function getMyChallenge(challengeId) {
   return axios.get(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CHALLENGE_SERVER}/detail?id=${challengeId}`, config());
+}
+
+export function getAllMyChallenge() {
+  return axios.get(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CHALLENGE_SERVER}`, config());
 }
 
 export function updateMyChallenge(challengeId, dataToSubmit) {

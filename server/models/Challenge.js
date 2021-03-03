@@ -24,9 +24,6 @@ const challengeSchema = mongoose.Schema({
   },
   dueDate: {
     type: Date
-  },
-  deadline: {
-    type: Boolean
   }
 }, { timestamps: true });
 

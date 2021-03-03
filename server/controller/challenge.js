@@ -25,7 +25,7 @@ exports.getMyChallenging = async (req, res, next) => {
 
     const myChallenge = await Challenge.find({ writer: user, isComplete: false });
 
-    if (myChallenge) {
+    if (myChallenge.length > 0) {
       res.status(200).json({ success: true, data: myChallenge });
     } else {
       res.status(200).json({ success: true, data: [] });
@@ -56,9 +56,9 @@ exports.getMyAllChallenge = async (req, res, next) => {
   try {
     const user = req.user._id;
 
-    const myChallenge = await Challenge.find({ writer: user });
+    const myChallenge = await Challenge.find({ writer: user }).sort({ createdAt: -1 });
 
-    if (myChallenge) {
+    if (myChallenge.length > 0) {
       res.status(200).json({ success: true, data: myChallenge });
     } else {
       res.status(200).json({ success: true, data: [] });

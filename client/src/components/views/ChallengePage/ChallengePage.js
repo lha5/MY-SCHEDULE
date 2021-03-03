@@ -38,9 +38,10 @@ function ChallengePage({ user }) {
   const getChallenge = () => {
     getChallenging()
       .then(response => {
-        setChallenge(response.data.data);
-
-        setHowManyDone(response.data.data[0].done.filter(element => element === true).length);
+        if (response.data.data.length > 0) {
+          setChallenge(response.data.data);
+          setHowManyDone(response.data.data[0].done.filter(element => element === true).length);
+        }
       })
       .catch(error => {
         console.error('error occured in Challenging - getChallenge() ', error);
@@ -54,7 +55,12 @@ function ChallengePage({ user }) {
 
   return (
     <Container>
-      <Challenging Challenge={Challenge} user={user} setIsSaveChallenge={setIsSaveChallenge} HowManyDone={HowManyDone} />
+      <Challenging
+        Challenge={Challenge}
+        user={user}
+        setIsSaveChallenge={setIsSaveChallenge}
+        HowManyDone={HowManyDone}
+      />
       <Challenged />
     </Container>
   );
