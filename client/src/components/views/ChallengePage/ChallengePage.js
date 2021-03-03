@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
+import swal from 'sweetalert';
 
 import Challenging from './Challenging';
 import Challenged from './Challenged';
+
+import { getChallenging } from '../../../apis/challengeApi';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 25px;
   padding: 0 calc(23%);
-  height: calc(100vh - 71px - 48px);
+  min-height: calc(100vh - 49px - 47px);
 
   @media only screen and (max-width: 1400px) {
     padding: 0 calc(20%);
@@ -21,10 +24,34 @@ const Container = styled.div`
   }
 `;
 
-function ChallengePage() {
+function ChallengePage({ user }) {
+  const [Challenge, setChallenge] = useState([]);
+  const [IsSaveChallenge, setIsSaveChallenge] = useState(false);
+
+  useEffect(() => {
+    getChallenge();
+    
+    setIsSaveChallenge(false);
+  }, [IsSaveChallenge]);
+
+  const getChallenge = () => {
+    getChallenging()
+      .then(response => {
+        setChallenge(response.data.data);
+      })
+      .catch(error => {
+        console.error('error occured in Challenging - getChallenge() ', error);
+
+        swal({
+          title: '챌린지를 가져올 수 없습니다.',
+          text: '잠시 후 다시 시도해주세요'
+        });
+      });
+  }
+
   return (
     <Container>
-      <Challenging />
+      <Challenging Challenge={Challenge} user={user} setIsSaveChallenge={setIsSaveChallenge} />
       <Challenged />
     </Container>
   );

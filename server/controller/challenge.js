@@ -23,7 +23,9 @@ exports.getMyChallenging = async (req, res, next) => {
   try {
     const user = req.user._id;
 
-    const myChallenge = await Challenge.find({ writer: user, dueDate: { $gt: moment() } });
+    const myChallenge = await Challenge.find({ writer: user, isComplete: false });
+
+    console.log('myChallenge', myChallenge);
 
     if (myChallenge) {
       res.status(200).json({ success: true, data: myChallenge });
@@ -37,7 +39,15 @@ exports.getMyChallenging = async (req, res, next) => {
 
 exports.getMyAllChallenge = async (req, res, next) => {
   try {
-    //
+    const user = req.user._id;
+
+    const myChallenge = await Challenge.find({ writer: user });
+
+    if (myChallenge) {
+      res.status(200).json({ success: true, data: myChallenge });
+    } else {
+      res.status(200).json({ success: true, data: [] });
+    }
   } catch (error) {
     next(error);
   }

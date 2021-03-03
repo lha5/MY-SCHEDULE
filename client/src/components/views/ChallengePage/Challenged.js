@@ -1,6 +1,7 @@
 import React from 'react';
 
 import styled from 'styled-components';
+import { SentimentDissatisfiedOutlined as NotSmile } from '@material-ui/icons';
 
 const Container = styled.div`
   border: 1px solid ${props => props.theme.colors.gray};
@@ -32,6 +33,7 @@ function Challenged() {
   const renderEmpty = () => {
     return (
       <div className="is-empty">
+        <div className="icon-empty"><NotSmile fontSize="large" /></div>
         <div className="notice-empty">지난 챌린지가 없습니다.</div>
       </div>
     );

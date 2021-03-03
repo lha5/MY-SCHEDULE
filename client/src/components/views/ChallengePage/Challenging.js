@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
-import { AddOutlined } from '@material-ui/icons';
+import { AddOutlined, SentimentDissatisfiedOutlined as NotSmile } from '@material-ui/icons';
 import swal from 'sweetalert';
+import ReactTooltip from 'react-tooltip';
+import { makeStyles } from '@material-ui/core/styles';
+import { Modal, Backdrop, Fade, TextField, FormControl, FormHelperText } from '@material-ui/core';
+import moment from 'moment';
 
-import { getChallenging, createChallenge } from './../../../apis/challengeApi';
+import { createChallenge } from './../../../apis/challengeApi';
 
 const Container = styled.div`
-  border: 1px solid ${props => props.theme.colors.gray};
+  border: 1px solid ${props => props.theme.colors.darkGray};
   border-radius: 5px;
   margin-top: 50px;
 
   div.section-title {
-    border-bottom: 1px solid ${props => props.theme.colors.gray};
+    border-bottom: 1px solid ${props => props.theme.colors.darkGray};
     margin: 15px auto;
     padding: 0 20px 15px 20px;
     text-align: left;
@@ -27,10 +31,19 @@ const Container = styled.div`
       border-radius: 50%;
       width: 36px;
       height: 36px;
-      background-color: ${props => props.theme.colors.darkGray};
+      background-color: ${props => props.theme.colors.white};
+      border: 2px solid ${props => props.theme.colors.darkGray};
 
       svg, path {
-        color: ${props => props.theme.colors.white};
+        color: ${props => props.theme.colors.darkGray};
+      }
+
+      &:hover {
+        background-color: ${props => props.theme.colors.darkGray};
+
+        svg, path {
+          color: ${props => props.theme.colors.white};
+        }
       }
     }
   }
@@ -40,7 +53,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     margin: 25px auto;
-
+    
     .notice-empty {
       font-size: 18px;
       color: ${props => props.theme.colors.darkGray};
@@ -49,33 +62,212 @@ const Container = styled.div`
   }
 `;
 
-function Challenging() {
-  const [Challenge, setChallenge] = useState([]);
+const useStyles = makeStyles(() => ({
+  paper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 600,
+    height: 550,
+    padding: '20px',
+    backgroundColor: '#ffffff',
+    borderRadius: '5px',
+    outline: 'none',
 
-  useEffect(() => {
-    getChallenge();
-  }, []);
+    '& > div': {
+      fontSize: '23px',
+      fontWeight: 600,
+    },
 
-  const getChallenge = () => {
-    getChallenging()
-      .then(response => {
-        setChallenge(response.data.data);
-      })
-      .catch(error => {
-        console.error('error occured in Challenging - getChallenge() ', error);
+    '& form': {
+      width: 600,
+      margin: '0 auto',
 
-        swal({
-          title: '챌린지를 가져올 수 없습니다.',
-          text: '잠시 후 다시 시도해주세요'
-        });
-      });
+      '& > div': {
+        margin: '35px 50px',
+      },
+
+      '& > div:nth-child(2)': {
+        display: 'flex',
+        justifyContent: 'space-between',
+      },
+
+      '& > button': {
+        width: 200,
+        height: 'auto',
+        padding: '20px 35px',
+        fontSize: '16px',
+        borderRadius: '5px',
+        backgroundColor: '#000000',
+        color: '#ffffff'
+      }
+    }
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
+}));
+
+const ChallengeDoing = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  justify-content: center;
+  align-items: center;
+  padding: 35px 0 50px 0;
+
+  div.c-title {
+    font-size: 32px;
+    font-weight: 500;
+  }
+
+  div.c-due-date {
+    font-size: 17px;
+    color: ${props => props.theme.colors.gray};
+  }
+`;
+
+function Challenging({ Challenge, user, setIsSaveChallenge }) {
+  const classes = useStyles();
+
+  const [Open, setOpen] = useState(false);
+  const [ChallengeInfo, setChallengeInfo] = useState({
+    title: '',
+    goal: 1,
+    dueDate: moment().format('YYYY[-]MM[-]DDThh:mm'),
+    memo: ''
+  });
 
   const renderEmpty = () => {
     return (
       <div className="is-empty">
+        <div className="icon-empty"><NotSmile fontSize="large" /></div>
         <div className="notice-empty">현재 진행중인 챌린지가 없습니다.</div>
       </div>
+    );
+  }
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const dataToSubmit = {
+      writer: user && user.userData ? user.userData._id : '',
+      title: ChallengeInfo.title,
+      goal: ChallengeInfo.goal,
+      done: [],
+      dueDate: ChallengeInfo.dueDate,
+      memo: ChallengeInfo.memo
+    };
+
+    await createChallenge(dataToSubmit)
+      .then(response => {
+        setIsSaveChallenge(true);
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.error(
+          'error occured in Challenging.js - createChallenge(dataToSubmit) ',
+          error
+        );
+
+        swal({
+          title: '새로운 챌린지를 생성할 수 없습니다.',
+          text: '잠시 후 다시 시도해주세요',
+        });
+      });
+  }
+
+  const onChangeTitle = (event) => {
+    setChallengeInfo({ ...ChallengeInfo, title: event.target.value });
+  }
+
+  const onChangeGoal = (event) => {
+    setChallengeInfo({ ...ChallengeInfo, goal: event.target.value });
+  }
+
+  const onChangeDueDate = event => {
+    setChallengeInfo({ ...ChallengeInfo, dueDate: event.target.value });
+  }
+
+  const onChangeMemo = event => {
+    setChallengeInfo({ ...ChallengeInfo, memo: event.target.value });
+  }
+
+  const createChallengeBody = () => {
+    return (
+      <div className={classes.paper}>
+        <div>새로운 챌런지에 도전!!</div>
+        <form onSubmit={handleSubmit} autoComplete="off">
+          <div>
+            <TextField
+              type="text"
+              onChange={onChangeTitle}
+              label="챌런지 제목"
+              id="standard-basic"
+              fullWidth
+              required
+            />
+          </div>
+          <div>
+            <TextField
+              type="number"
+              onChange={onChangeGoal}
+              label="챌린지 목표 갯수"
+              helperText="범위는 1개 부터 50개까지 가능합니다."
+              required
+            />
+            <TextField
+              id="datetime-local"
+              label="챌린지 기한"
+              type="datetime-local"
+              value={ChallengeInfo.dueDate}
+              onChange={onChangeDueDate}
+              required
+            />
+          </div>
+          <div>
+            <TextField
+              type="text"
+              variant="outlined"
+              onChange={onChangeMemo}
+              label="메모"
+              multiline
+              rows="3"
+              rowsMax="5"
+              value={ChallengeInfo.memo}
+              fullWidth
+            />
+          </div>
+          <button type="submit">챌런지 시작하기</button>
+        </form>
+      </div>
+    );
+  }
+
+  const renderChallenging = () => {
+    return (
+      <ChallengeDoing>
+        <div className="c-title">
+          {Challenge[0].title} (
+          {Challenge[0].done === 0 ? '0' : Challenge[0].done}/
+          {Challenge[0].goal})
+        </div>
+        <div className="c-due-date">
+          ~{' '}
+          {moment(Challenge[0].dueDate).format('YYYY[년] MM[월] DD[일] hh:mm')}
+        </div>
+      </ChallengeDoing>
     );
   }
 
@@ -83,9 +275,36 @@ function Challenging() {
     <Container>
       <div className="section-title">
         <div className="challenging">진행 중인 챌린지</div>
-        {Challenge.length <= 0 && <button type="button"><AddOutlined /></button>}
+        {Challenge.length <= 0 && (
+          <button
+            type="button"
+            data-tip="챌린지 만들기"
+            data-effect="solid"
+            data-place="left"
+            onClick={handleOpen}
+          >
+            <AddOutlined />
+          </button>
+        )}
+        <ReactTooltip />
       </div>
-      {Challenge.length <= 0 ? renderEmpty() : <div>있음</div>}
+      {Challenge.length <= 0 ? renderEmpty() : renderChallenging()}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={Open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={Open} disableStrictModeCompat={true}>
+          {createChallengeBody()}
+        </Fade>
+      </Modal>
     </Container>
   );
 }

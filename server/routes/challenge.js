@@ -8,7 +8,7 @@ const { auth } = require('../middleware/auth');
 //        Calendar
 // -------------------------
 
-router.get('/', auth, ChallengeContoller.getMyChallenging);
+router.get('/:id', auth, ChallengeContoller.getMyChallenging);
 
 router.get('/', auth, ChallengeContoller.getMyAllChallenge);
 

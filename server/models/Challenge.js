@@ -6,6 +6,12 @@ const challengeSchema = mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
+  title: {
+    type: String
+  },
+  memo: {
+    type: String
+  },
   goal: {
     type: Number
   },
@@ -18,6 +24,9 @@ const challengeSchema = mongoose.Schema({
   },
   dueDate: {
     type: Date
+  },
+  deadline: {
+    type: Boolean
   }
 }, { timestamps: true });
 
