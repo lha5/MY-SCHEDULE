@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -6,10 +6,11 @@ import styled from 'styled-components';
 import axios from 'axios';
 import swal from 'sweetalert';
 import { Avatar, Menu, MenuItem } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
 const Container = styled.div`
   display: flex;
+  margin: 0 auto;
 
   div {
     div.user-menu {
@@ -55,6 +56,23 @@ const StyledMenu = withStyles({
     {...props}
   />
 ));
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  small: {
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+  },
+  large: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+  }
+}));
 
 function UserMenuBar() {
   const user = useSelector(state => state.user);
@@ -110,7 +128,7 @@ function UserMenuBar() {
     });
   }
 
-  const [AnchorEl, setAnchorEl] = React.useState(null);
+  const [AnchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -120,12 +138,14 @@ function UserMenuBar() {
     setAnchorEl(null);
   };
 
+  const classes = useStyles();
+
   return (
     <Container>
       {user.userData && user.userData.isAuth ? (
         <div>
           <div className="user-menu" onClick={handleClick}>
-            <Avatar src="/broken-image.jpg" />
+            <Avatar src="/broken-image.jpg" className={classes.small} />
           </div>
           <StyledMenu
             id="customized-menu"

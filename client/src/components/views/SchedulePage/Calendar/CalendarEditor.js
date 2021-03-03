@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 import { CirclePicker } from 'react-color';
@@ -130,6 +131,8 @@ const TryAddYours = styled.div`
 `;
 
 function CalendarEditor({ setCalendarData }) {
+  const user = useSelector(state => state.user);
+
   const [Name, setName] = useState('');
   const [Background, setBackground] = useState('');
   const [CalTheme, setCalTheme] = useState([]);
@@ -148,7 +151,7 @@ function CalendarEditor({ setCalendarData }) {
         console.error('error occured in MyCalendarTheme.js - getCalendarTheme() ', error);
 
         swal({
-          title: '캘린더 테마를 불러올 수 없습니다.',
+          title: '달력 일정 구분을 불러올 수 없습니다.',
           icon: 'error'
         });
       });
@@ -181,7 +184,7 @@ function CalendarEditor({ setCalendarData }) {
         lastId += response.data.data;
 
         const dataToSubmit = {
-          writer: window.localStorage.getItem('user_id') || '',
+          writer: user && user.userData ? user.userData._id : '',
           id: lastId,
           name: Name,
           color: '#ffffff',
@@ -200,7 +203,7 @@ function CalendarEditor({ setCalendarData }) {
             console.error('error occured in CalendarEditor.js - createCalendarTheme() ', error);
 
             swal({
-              title: '달력 테마를 가져올 수 없습니다.',
+              title: '달력 일정 구분을 저장할 수 없습니다.',
               text: '잠시 후 다시 시도해주세요'
             });
           });
@@ -209,7 +212,7 @@ function CalendarEditor({ setCalendarData }) {
         console.error('error occured in CalendarEditor.js - getLastId() ', error);
 
         swal({
-          title: '달력 테마 정보를 가져올 수 없습니다.',
+          title: '달력 일정 구분 정보를 가져올 수 없습니다.',
           text: '잠시 후 다시 시도해주세요'
         });
       });
@@ -248,7 +251,7 @@ function CalendarEditor({ setCalendarData }) {
         <div className="color-palette" />
         <div id={theme.id} className="theme-name">{theme.name}</div>
       </div>
-      <div onClick={handleDelete}><DeleteOutlined id={theme.id} /></div>
+      {theme.id !== 0 && <div onClick={handleDelete}><DeleteOutlined id={theme.id} /></div>}
     </MyTheme>
   ));
 

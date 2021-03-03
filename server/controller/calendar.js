@@ -6,7 +6,13 @@ exports.getMyCalendarTheme = async (req, res, next) => {
 
     const myCalendarTheme = await Calendar.find({ writer: user });
 
-    res.status(200).json({ success: true, data: myCalendarTheme });
+    if (myCalendarTheme.length > 0) {
+      res.status(200).json({ success: true, data: myCalendarTheme });
+    } else {
+      const commonTheme = await Calendar.find({ id: 0 });
+
+      return res.status(200).json({ success: true, data: commonTheme });
+    }
   } catch (error) {
     next(error);
   }

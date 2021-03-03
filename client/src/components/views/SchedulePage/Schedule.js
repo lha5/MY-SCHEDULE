@@ -24,6 +24,10 @@ const Container = styled.div`
     display: grid;
     grid-template-columns: 0.25fr auto 0.25fr;
 
+    div.render-range-mobile {
+      display: none;
+    }
+
     div.menu-navi {
       display: flex;
       flex-direction: row;
@@ -99,22 +103,12 @@ const Container = styled.div`
     border: 1px solid #e5e5e5;
     border-top: none;
 
-    .tui-full-calendar-dropdown-menu {
-      text-align: left;
+    div.calendar-container > div {
+      height: 800px !important;
     }
 
-    .tui-full-calendar-month-dayname-item {
-      text-align: center;
-      font-size: 15px;
-    }
-
-    .tui-full-calendar-weekday-grid-header {
-      text-align: left;
-    }
-
-    .tui-full-calendar-weekday-schedule,
-    .tui-full-calendar-weekday-schedule-time {
-      text-align: left;
+    .tui-full-calendar-month {
+      min-height: initial;
     }
 
     .tui-full-calendar-weekday-grid-line:hover {
@@ -126,15 +120,74 @@ const Container = styled.div`
     }
 
     .tui-full-calendar-confirm {
-      background-color: ${props => props.theme.colors.primary};
+      background-color: ${(props) => props.theme.colors.primary};
     }
 
     .tui-full-calendar-weekday-grid-date.tui-full-calendar-weekday-grid-date-decorator {
-      background-color: ${props => props.theme.colors.primary};
+      background-color: ${(props) => props.theme.colors.primary};
     }
 
     .tui-full-calendar-extra-date .tui-full-calendar-weekday-grid-date {
-      color: ${props => props.theme.colors.gray};
+      color: ${(props) => props.theme.colors.gray};
+    }
+  }
+
+  @media only screen and (max-width: 1400px) {
+    div.calendar-container > div {
+      height: 700px !important;
+    }
+
+    div.calendar-container
+      > div
+      > div
+      > div.tui-full-calendar-month.tui-full-calendar-vlayout-container
+      > div:nth-child(2) {
+      height: calc(100% - 31px) !important;
+    }
+  }
+
+  @media ${(props) => props.theme.device.labtop} {
+    div.calendar-container > div {
+      height: 600px !important;
+    }
+  }
+
+  @media ${(props) => props.theme.device.tablet} {
+    div.calendar-container > div {
+      height: 390px !important;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    div#menu {
+      grid-template-columns: none;
+      grid-template-areas:
+        "top-area top-area"
+        "a b";
+
+      div.render-range-mobile {
+        display: flex;
+        grid-area: top-area;
+        justify-content: center;
+        padding: 0 0 10px 0;
+        font-size: 21px;
+        font-weight: 500;
+      }
+
+      div.menu-navi {
+        grid-area: a;
+        button.btn.move-today {
+          margin-right: 0;
+        }
+      }
+
+      div.render-range {
+        display: none;
+      }
+
+      div.select-box {
+        grid-area: b;
+      }
     }
   }
 `;
@@ -419,6 +472,7 @@ function Schedule({ user }) {
   return (
     <Container>
       <div id="menu">
+        <div className="render-range-mobile">{DateRange}</div>
         <div className="menu-navi">
           <button
             type="button"

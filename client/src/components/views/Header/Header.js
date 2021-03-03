@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import MenuOutlinedIcon from '@material-ui/icons/MenuOutlined';
 
-import TitleLogo from '../../../assets/images/title.png';
 import NavBar from './NavBar';
 import UserMenuBar from './UserMenuBar';
 
@@ -18,11 +17,13 @@ const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.lightGray};
 
   div.logo-container {
+    display: flex;
     margin-right: 20px;
+    white-space: nowrap;
+    font-size: 19px;
 
-    a img {
-      display: block;
-      height: 50px;
+    a {
+      font-weight: 900;
     }
   }
 
@@ -31,22 +32,25 @@ const Container = styled.div`
   }
 
   @media only screen and (max-width: 1400px) {
-    padding: 0 calc(20%);
+    padding: 7px calc(20%);
   }
 
   @media ${props => props.theme.device.labtop} {
-    padding: 0 calc(15%);
+    padding: 7px calc(15%);
   }
 
   @media ${props => props.theme.device.tablet} {
     justify-content: center;
+    position: relative;
 
     div:not(.logo-container, .menu-hamburger) {
       display: none;
     }
 
     div.menu-hamburger {
-      display: block;
+      display: flex;
+      position: absolute;
+      right: calc(10%);
       cursor: pointer;
     }
   }
@@ -57,7 +61,7 @@ function Header() {
     <Container>
       <div className="logo-container">
         <Link to="/">
-          <img src={TitleLogo} alt="마감을 사수하자" />
+          Time Attack
         </Link>
       </div>
       <NavBar />

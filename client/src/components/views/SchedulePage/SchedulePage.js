@@ -17,7 +17,7 @@ const Container = styled.div`
   }
 
   @media ${props => props.theme.device.labtop} {
-    padding: 20px calc(18%);
+    padding: 45px calc(18%);
   }
 `;
 
