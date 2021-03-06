@@ -30,7 +30,6 @@ const Container = styled.div`
   }
 
   div.apple-container {
-    border-top: 1px solid ${props => props.theme.colors.black};
     border-left: 1px solid ${props => props.theme.colors.black};
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -44,6 +43,14 @@ const Container = styled.div`
 
       &:hover {
         background-color: ${props => props.theme.colors.primary};
+      }
+
+      &:nth-child(1),
+      &:nth-child(2),
+      &:nth-child(3),
+      &:nth-child(4),
+      &:nth-child(5) {
+        border-top: 1px solid ${props => props.theme.colors.black};
       }
     }
 

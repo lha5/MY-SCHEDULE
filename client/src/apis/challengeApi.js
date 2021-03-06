@@ -29,3 +29,7 @@ export function getAllMyChallenge() {
 export function updateMyChallenge(challengeId, dataToSubmit) {
   return axios.patch(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CHALLENGE_SERVER}?id=${challengeId}`, dataToSubmit, config());
 }
+
+export function deleteChallenge(challengeId) {
+  return axios.delete(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CHALLENGE_SERVER}?id=${challengeId}`, config());
+}

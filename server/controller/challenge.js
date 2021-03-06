@@ -84,3 +84,19 @@ exports.updateMyChallenging = async (req, res, next) => {
     next(error);
   }
 }
+
+exports.deleteMyChallenge = async (req, res, next) => {
+  try {
+    const challengeId = req.query.id;
+    
+    await Challenge.findOneAndDelete({ _id: challengeId }, (err, doc) => {
+      if (err) {
+        res.status(500).json({ success: false, err });
+      }
+
+      res.status(200).json({ success: true });
+    });
+  } catch (error) {
+    next(error);
+  }
+}

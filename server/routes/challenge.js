@@ -18,4 +18,6 @@ router.post('/', auth, ChallengeContoller.createChallenge);
 
 router.patch('/', auth, ChallengeContoller.updateMyChallenging);
 
+router.delete('/', auth, ChallengeContoller.deleteMyChallenge);
+
 module.exports = router;
