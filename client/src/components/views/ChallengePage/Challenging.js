@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
-import { AddOutlined, SentimentDissatisfiedOutlined as NotSmile } from '@material-ui/icons';
+import { AddOutlined, Delete, SentimentDissatisfiedOutlined as NotSmile } from '@material-ui/icons';
 import swal from 'sweetalert';
 import ReactTooltip from 'react-tooltip';
 import { makeStyles } from '@material-ui/core/styles';
 import { Modal, Backdrop, Fade, TextField } from '@material-ui/core';
 import moment from 'moment';
 
-import { createChallenge } from './../../../apis/challengeApi';
+import { createChallenge, deleteChallenge } from './../../../apis/challengeApi';
 
 const Container = styled.div`
   border: 1px solid ${props => props.theme.colors.darkGray};
@@ -46,6 +46,10 @@ const Container = styled.div`
           color: ${props => props.theme.colors.white};
         }
       }
+    }
+
+    .del-btn {
+      border: none;
     }
   }
 
@@ -131,7 +135,7 @@ const ChallengeDoing = styled.div`
   }
 `;
 
-function Challenging({ Challenge, user, setIsSaveChallenge, HowManyDone }) {
+function Challenging({ Challenge, user, setIsSaveChallenge, HowManyDone, getChallenge }) {
   const classes = useStyles();
 
   const [Open, setOpen] = useState(false);
@@ -149,6 +153,31 @@ function Challenging({ Challenge, user, setIsSaveChallenge, HowManyDone }) {
         <div className="notice-empty">현재 진행중인 챌린지가 없습니다.</div>
       </div>
     );
+  }
+
+  const handleDelete = () => {
+    swal({
+      title: '챌린지를 삭제하시겠습니까?',
+      icon: 'warning',
+      buttons: ['취소', '삭제']
+    }).then(async value => {
+      if (value) {
+        deleteChallenge(Challenge[0]._id)
+          .then(response => {
+            getChallenge();
+          })
+          .catch(error => {
+            console.error('error occured in CalendarEditor.js - handleDelete(event) ', error);
+
+            swal({
+              title: '일정 구분을 삭제할 수 없습니다.',
+              icon: 'error'
+            });
+          });
+      } else {
+        return false;
+      }
+    });
   }
 
   const handleOpen = () => {
@@ -283,7 +312,18 @@ function Challenging({ Challenge, user, setIsSaveChallenge, HowManyDone }) {
     <Container>
       <div className="section-title">
         <div className="challenging">진행 중인 챌린지</div>
-        {Challenge && Challenge.length <= 0 && (
+        {Challenge && Challenge.length > 0 ? (
+          <button
+            type="button"
+            className="del-btn"
+            data-tip="챌린지 삭제"
+            data-effect="solid"
+            data-place="left"
+            onClick={handleDelete}
+          >
+            <Delete />
+          </button>
+        ) : (
           <button
             type="button"
             data-tip="챌린지 만들기"

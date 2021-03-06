@@ -12,54 +12,62 @@ import AppleImage from '../../../assets/images/apple.png';
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 20px calc(23%);
+  padding: 0 calc(23%);
   height: calc(100vh - 49px - 47px);
   justify-content: center;
   align-items: center;
 
-  div.detail-info {
+  div.render-box {
     display: flex;
-    flex-direction: column;
-    row-gap: 20px;
-    text-align: left;
+    flex-direction: row;
+    column-gap: 50px;
+    justify-content: center;
+    align-items: center;
 
-    .info-title {
-      font-size: 27px;
-      font-weight: 500;
-    }
-  }
+    div.detail-info {
+      display: flex;
+      flex-direction: column;
+      row-gap: 20px;
+      text-align: left;
 
-  div.apple-container {
-    border-left: 1px solid ${props => props.theme.colors.black};
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    margin: 0 auto;
-
-    .each-apple {
-      cursor: pointer;
-      border-right: 1px solid ${props => props.theme.colors.black};
-      border-bottom: 1px solid ${props => props.theme.colors.black};
-      padding: 20px;
-
-      &:hover {
-        background-color: ${props => props.theme.colors.primary};
-      }
-
-      &:nth-child(1),
-      &:nth-child(2),
-      &:nth-child(3),
-      &:nth-child(4),
-      &:nth-child(5) {
-        border-top: 1px solid ${props => props.theme.colors.black};
+      .info-title {
+        font-size: 27px;
+        font-weight: 500;
       }
     }
 
-    .done-apple {
-      cursor: default;
-      background-color: ${props => props.theme.colors.gray};
+    div.apple-container {
+      border-left: 1px solid ${props => props.theme.colors.black};
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      margin: 0 auto;
 
-      img {
-        opacity: 0.5;
+      .each-apple {
+        cursor: pointer;
+        border-right: 1px solid ${props => props.theme.colors.black};
+        border-bottom: 1px solid ${props => props.theme.colors.black};
+        padding: 20px;
+
+        &:hover {
+          background-color: ${props => props.theme.colors.primary};
+        }
+
+        &:nth-child(1),
+        &:nth-child(2),
+        &:nth-child(3),
+        &:nth-child(4),
+        &:nth-child(5) {
+          border-top: 1px solid ${props => props.theme.colors.black};
+        }
+      }
+
+      .done-apple {
+        cursor: default;
+        background-color: ${props => props.theme.colors.gray};
+
+        img {
+          opacity: 0.5;
+        }
       }
     }
   }
@@ -111,7 +119,7 @@ function DetailSection({ challengeId, Challenge, HowManyDone, getChallenge }) {
   }
 
   const renderTable = () => (
-    <>
+    <div className="render-box">
       <div className="detail-info">
         <div className="info-title">{Challenge.title}</div>
         <div className="info-ing">
@@ -119,7 +127,7 @@ function DetailSection({ challengeId, Challenge, HowManyDone, getChallenge }) {
         </div>
         <div className="info-duedate">
           {moment(Challenge.dueDate).format('YYYY[년] MM[월] DD[일] hh:mm')}{' '}
-          까지 입니다!
+          까지!!
         </div>
         <div className="info-memo">{Challenge.memo}</div>
       </div>
@@ -138,7 +146,7 @@ function DetailSection({ challengeId, Challenge, HowManyDone, getChallenge }) {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 
   const renderDone = () => (

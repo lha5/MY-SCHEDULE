@@ -56,7 +56,7 @@ exports.getMyAllChallenge = async (req, res, next) => {
   try {
     const user = req.user._id;
 
-    const myChallenge = await Challenge.find({ writer: user }).sort({ createdAt: -1 });
+    const myChallenge = await Challenge.find({ writer: user, isComplete: true }).sort({ createdAt: -1 });
 
     if (myChallenge.length > 0) {
       res.status(200).json({ success: true, data: myChallenge });

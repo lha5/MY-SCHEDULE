@@ -31,6 +31,10 @@ function ChallengePage({ user }) {
 
   useEffect(() => {
     getChallenge();
+  }, []);
+
+  useEffect(() => {
+    getChallenge();
     
     setIsSaveChallenge(false);
   }, [IsSaveChallenge]);
@@ -41,6 +45,8 @@ function ChallengePage({ user }) {
         if (response.data.data.length > 0) {
           setChallenge(response.data.data);
           setHowManyDone(response.data.data[0].done.filter(element => element === true).length);
+        } else {
+          setChallenge([]);
         }
       })
       .catch(error => {
@@ -60,6 +66,7 @@ function ChallengePage({ user }) {
         user={user}
         setIsSaveChallenge={setIsSaveChallenge}
         HowManyDone={HowManyDone}
+        getChallenge={getChallenge}
       />
       <Challenged />
     </Container>
