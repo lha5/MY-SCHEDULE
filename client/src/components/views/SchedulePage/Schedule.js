@@ -192,8 +192,7 @@ const Container = styled.div`
   }
 `;
 
-function Schedule({ user }) {
-  const [Schedule, setSchedule] = useState([]);
+function Schedule({ user, Calendars, setCalendars, Schedule, setSchedule, getSchedule }) {
   const [View, setView] = useState('month');
   const [ViewModeOptions, setViewModeOptions] = useState([
     {
@@ -205,50 +204,17 @@ function Schedule({ user }) {
       value: 'week'
     }
   ]);
-  const [Calendars, setCalendars] = useState([]);
   const [DateRange, setDateRange] = useState('');
 
   const cal = useRef();
 
-  const getSchedule = () => {
-    getMySchedule()
-      .then(response => {
-        setSchedule(response.data.data);
-      })
-      .catch(error => {
-        console.error('error occured in SchedulePage.js - getMySchedule() ', error);
-
-        swal({
-          title: '일정을 가져올 수 없습니다.',
-          text: '잠시 후 다시 시도해주세요'
-        });
-      });
-  }
-
-  const getCalendar = () => {
-    getCalendarTheme()
-      .then(response => {
-        setCalendars(response.data.data);
-      })
-      .catch(error => {
-        console.error('error occured in SchedulePage.js - getMySchedule() ', error);
-
-        swal({
-          title: '일정을 가져올 수 없습니다.',
-          text: '잠시 후 다시 시도해주세요'
-        });
-      });
-  }
-
   useEffect(() => {
-    getSchedule();
-    getCalendar();
     setRenderRangeText();
   }, []);
 
   useEffect(() => {
     setRenderRangeText();
-  }, [View])
+  }, [View]);
  
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
     const writer = user && user.userData ? user.userData._id : '';

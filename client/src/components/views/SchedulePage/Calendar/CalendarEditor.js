@@ -130,7 +130,7 @@ const TryAddYours = styled.div`
   }
 `;
 
-function CalendarEditor({ setCalendarData }) {
+function CalendarEditor({ setCalendars }) {
   const user = useSelector(state => state.user);
 
   const [Name, setName] = useState('');
@@ -145,7 +145,7 @@ function CalendarEditor({ setCalendarData }) {
     getCalendarTheme()
       .then(response => {
         setCalTheme(response.data.data);
-        setCalendarData(CalTheme);
+        setCalendars(CalTheme);
       })
       .catch(error => {
         console.error('error occured in MyCalendarTheme.js - getCalendarTheme() ', error);

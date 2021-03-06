@@ -48,29 +48,19 @@ const Container = styled.div`
   }
 `;
 
-function Calendar() {
+function Calendar({ Calendars, setCalendars, getCalendar }) {
   const classes = useStyles();
   
   const [Open, setOpen] = useState(false);
-  const [CalendarData, setCalendarData] = useState([]);
 
   useEffect(() => {
     getCalendarData();
   }, []);
 
-
-  const handleOpenModal = () => {
-    setOpen(true);
-  }
-
-  const handleCloseModal = () => {
-    setOpen(false);
-  }
-
   const getCalendarData = () => {
     getCalendarTheme()
       .then(response => {
-        setCalendarData(response.data.data);
+        setCalendars(response.data.data);
       })
       .catch(error => {
         console.error('error occured in MyCalendarTheme.js - getCalendarTheme() ', error);
@@ -82,9 +72,17 @@ function Calendar() {
       });
   }
 
+  const handleOpenModal = () => {
+    setOpen(true);
+  }
+
+  const handleCloseModal = () => {
+    setOpen(false);
+  }
+
   return (
     <Container>
-      <MyCalendarTheme CalendarData={CalendarData} />
+      <MyCalendarTheme CalendarData={Calendars} />
       <button
         type="button"
         onClick={handleOpenModal}
@@ -108,7 +106,7 @@ function Calendar() {
         }}
       >
         <Fade in={Open} disableStrictModeCompat={true}>
-          <CalendarEditor setOpen={setOpen} setCalendarData={setCalendarData} />
+          <CalendarEditor setOpen={setOpen} setCalendars={setCalendars} />
         </Fade>
       </Modal>
     </Container>

@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
+import swal from 'sweetalert';
 
-import Schedule from './Schedule';
-import Calendar from './Calendar/Calendar';
+import { getMySchedule } from './../../../apis/scheduleApi';
+
+import { getCalendarTheme } from './../../../apis/calendarApi';
+
+import ScheduleComponent from './Schedule';
+import CalendarComponent from './Calendar/Calendar';
 
 const Container = styled.div`
   display: flex;
@@ -22,11 +27,55 @@ const Container = styled.div`
 `;
 
 function SchedulePage({ user }) {
+  const [Schedule, setSchedule] = useState([]);
+  const [Calendars, setCalendars] = useState([]);
+
+  useEffect(() => {
+    getSchedule();
+    getCalendar();
+  }, []);
+  
+  const getSchedule = () => {
+    getMySchedule()
+      .then(response => {
+        setSchedule(response.data.data);
+      })
+      .catch(error => {
+        console.error('error occured in SchedulePage.js - getMySchedule() ', error);
+
+        swal({
+          title: '일정을 가져올 수 없습니다.',
+          text: '잠시 후 다시 시도해주세요'
+        });
+      });
+  }
+
+  const getCalendar = () => {
+    getCalendarTheme()
+      .then(response => {
+        setCalendars(response.data.data);
+      })
+      .catch(error => {
+        console.error('error occured in SchedulePage.js - getMySchedule() ', error);
+
+        swal({
+          title: '일정을 가져올 수 없습니다.',
+          text: '잠시 후 다시 시도해주세요'
+        });
+      });
+  }
 
   return (
     <Container>
-      <Calendar />
-      <Schedule user={user} />
+      <CalendarComponent Calendars={Calendars} setCalendars={setCalendars} getCalendar={getCalendar} />
+      <ScheduleComponent
+        user={user}
+        Schedule={Schedule}
+        setSchedule={setSchedule}
+        Calendars={Calendars}
+        setCalendars={Calendars}
+        getSchedule={getSchedule}
+      />
     </Container>
   );
 }
