@@ -6,7 +6,7 @@ import { AddOutlined, SentimentDissatisfiedOutlined as NotSmile } from '@materia
 import swal from 'sweetalert';
 import ReactTooltip from 'react-tooltip';
 import { makeStyles } from '@material-ui/core/styles';
-import { Modal, Backdrop, Fade, TextField, FormControl, FormHelperText } from '@material-ui/core';
+import { Modal, Backdrop, Fade, TextField } from '@material-ui/core';
 import moment from 'moment';
 
 import { createChallenge } from './../../../apis/challengeApi';

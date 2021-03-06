@@ -6,7 +6,7 @@ import { getMyChallenge, updateMyChallenge } from '../../../apis/challengeApi';
 
 import DetailSection from './DetailSection';
 
-function DetailChallenge({ match }) {
+function DetailChallenge({ match, history }) {
   const challengeId = match.params.id || '';
 
   const [Challenge, setChallenge] = useState({});
@@ -24,7 +24,7 @@ function DetailChallenge({ match }) {
         const trueCount = response.data.data[0].done.filter((element) => element === true).length;
         setHowManyDone(trueCount);
 
-        if (response.data.data[0].goal.length === trueCount) {
+        if (trueCount === response.data.data[0].goal.length) {
           allDoneMyChallenge();
         }
       })
@@ -47,7 +47,17 @@ function DetailChallenge({ match }) {
     };
 
     updateMyChallenge(challengeId, dataToSubmit)
-      .then()
+      .then(response => {
+        swal({
+          title: '축하합니다!!',
+          text: '해당 챌린지를 완료하였습니다.',
+          icon: 'success'
+        }).then(value => {
+          if (value) {
+            history.push('/challenge');
+          }
+        });
+      })
       .catch((error) => {
         console.error(
           'error occured in DetailChallenge - allDoneMyChallenge() ',
