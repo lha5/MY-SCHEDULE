@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 import swal from 'sweetalert';
@@ -90,13 +91,17 @@ const useStyles = makeStyles({
 });
 
 function Challenged() {
+  const user = useSelector(state => state.user);
+
   const [All, setAll] = useState([]);
   const [Selected, setSelected] = useState([]);
   
   const classes = useStyles();
 
   useEffect(() => {
-    getAllChallenge();
+    if (user && user.userData) {
+      getAllChallenge();
+    }
   }, []);
 
   const getAllChallenge = () => {
@@ -105,7 +110,7 @@ function Challenged() {
         setAll(response.data.data);
       })
       .catch(error => {
-        console.error('error occured in Challenging - getChallenge() ', error);
+        console.error('error occured in Challenging - getAllChallenge() ', error);
 
         swal({
           title: '챌린지를 가져올 수 없습니다.',
@@ -242,7 +247,7 @@ function Challenged() {
       <div className="section-title">
         <div className="challenging">지난 챌린지</div>
       </div>
-      {All.length > 0 ? renderList() : renderEmpty()}
+      {All && All.length > 0 ? renderList() : renderEmpty()}
     </Container>
   );
 }
