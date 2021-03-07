@@ -1,7 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
 import styled from 'styled-components';
+import { Drawer, List, ListItem, ListItemText } from '@material-ui/core';
 import MenuOutlinedIcon from '@material-ui/icons/MenuOutlined';
 
 import NavBar from './NavBar';
@@ -56,19 +57,55 @@ const Container = styled.div`
   }
 `;
 
-function Header() {
+function Header({ user }) {
+  const [Open, setOpen] = useState(false);
+
+  const toggleDrawer = open => event => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+
+    setOpen(open);
+  }
+
   return (
     <Container>
       <div className="logo-container">
-        <Link to="/">
-          My Schedule
-        </Link>
+        <Link to="/">My Schedule</Link>
       </div>
       <NavBar />
       <UserMenuBar />
       <div className="menu-hamburger">
-        <MenuOutlinedIcon />
+        <MenuOutlinedIcon onClick={toggleDrawer(true)} />
       </div>
+      <Drawer anchor="top" open={Open} onClose={toggleDrawer(false)}>
+        <div
+          className="drawer-menu"
+          role="presentation"
+        >
+          <List>
+            <ListItem>
+              <ListItemText>
+                <NavLink to="/schedule" activeClassName="active-menu">
+                  스케쥴 관리
+                </NavLink>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText>
+                <NavLink to="/challenge" activeClassName="active-menu">
+                  마감 챌린지
+                </NavLink>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText>
+                <UserMenuBar />
+              </ListItemText>
+            </ListItem>
+          </List>
+        </div>
+      </Drawer>
     </Container>
   );
 }

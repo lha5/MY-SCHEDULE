@@ -30,15 +30,13 @@ function ChallengePage({ user }) {
   const [HowManyDone, setHowManyDone] = useState(0);
 
   useEffect(() => {
-    if (user && user.userData.isAuth === true) {
+    if (user && user.userData && user.userData.isAuth === true) {
       getChallenge();
-    } else {
-      return;
     }
   }, []);
 
   useEffect(() => {
-    if (user && user.userData === true) {
+    if (user && user.userData && user.userData.isAuth === true) {
       getChallenge();
     }
     
@@ -49,7 +47,11 @@ function ChallengePage({ user }) {
     getChallenging()
       .then(response => {
         setChallenge(response.data.data);
-        setHowManyDone(response.data.data[0].done.filter(element => element === true).length);
+        if (response.data.data[0]) {
+          setHowManyDone(response.data.data[0].done.filter(element => element === true).length);
+        } else {
+          setHowManyDone(0);
+        }
       })
       .catch(error => {
         console.error('error occured in Challenging - getChallenge() ', error);

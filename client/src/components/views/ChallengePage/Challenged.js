@@ -99,7 +99,7 @@ function Challenged() {
   const classes = useStyles();
 
   useEffect(() => {
-    if (user && user.userData) {
+    if (user && user.userData && user.userData.isAuth) {
       getAllChallenge();
     }
   }, []);
