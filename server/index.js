@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+// const https = require('https');
+// const fs = require('fs');
 
 require('dotenv').config();
 const mongoose = require('mongoose');
@@ -37,15 +39,31 @@ app.use('/upload', express.static('upload'));
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  // All the javascript and css files will be read and served from this folder
   app.use(express.static('client/build'));
 
-  // index.html for all page routes    html or routing and navigation
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
   });
 }
+
+/*
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/www.myschedule.kr/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/www.myschedule.kr/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/www.myschedule.kr/chain.pem', 'utf8');
+
+const credentials = {
+   key: privateKey,
+   cert: certificate,
+   ca: ca
+};
+
+app.use(express.static('public'));
+
+const httpsServer = https.createServer(credentials, app);
+httpsServer.listen('5000', () => {
+    console.log('listening on https://myschedule.kr:5000');
+});
+*/
 
 const PORT = 5000;
 

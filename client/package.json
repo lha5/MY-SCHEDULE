@@ -10,6 +10,7 @@
     "@testing-library/user-event": "12.7.1",
     "@toast-ui/react-calendar": "1.0.5",
     "axios": "0.21.1",
+    "core-js": "3.9.1",
     "material-design-icons": "3.0.1",
     "moment": "2.29.1",
     "react": "^17.0.1",
