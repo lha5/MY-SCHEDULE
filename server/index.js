@@ -7,6 +7,18 @@ const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
 
+// const privateKey = fs.readFileSync('/etc/letsencrypt/live/.myschedule.kr/privkey.pem', 'utf8');
+// const certificate = fs.readFileSync('/etc/letsencrypt/live/.myschedule.kr/cert.pem', 'utf8');
+// const ca = fs.readFileSync('/etc/letsencrypt/live/.myschedule.kr/chain.pem', 'utf8');
+
+// const credentials = {
+//    key: privateKey,
+//    cert: certificate,
+//    ca: ca
+// };
+
+// const httpsServer = https.createServer(credentials, app);
+
 app.use(express.json());
 
 mongoose
@@ -46,27 +58,12 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-/*
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/www.myschedule.kr/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/www.myschedule.kr/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/www.myschedule.kr/chain.pem', 'utf8');
-
-const credentials = {
-   key: privateKey,
-   cert: certificate,
-   ca: ca
-};
-
-app.use(express.static('public'));
-
-const httpsServer = https.createServer(credentials, app);
-httpsServer.listen('5000', () => {
-    console.log('listening on https://myschedule.kr:5000');
-});
-*/
-
 const PORT = 5000;
 
 app.listen(PORT, () => {
   console.log(`App is running on http://localhost:${PORT}`);
 });
+
+// httpsServer.listen('8443', () => {
+//   console.log('https server is running at 8443');
+// });
