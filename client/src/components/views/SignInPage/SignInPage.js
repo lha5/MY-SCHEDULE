@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import styled from 'styled-components';
 import axios from 'axios';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import titleLogo from '../../../assets/images/title-logo.png'
 import KakaoLogin from './KakaoLogin';
@@ -32,6 +33,14 @@ const Container = styled.div`
     }
   }
 
+  div.loading {
+    margin: 0 auto;
+
+    .logging {
+      margin-top: 20px;
+    }
+  }
+
   @media only screen and (max-width: 1400px) {
     padding: 0 calc(20%);
   }
@@ -52,9 +61,12 @@ const Container = styled.div`
 function SignInPage() {
   const code = useRef();
 
+  const [IsLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const thisUrlParameter = window.location.search;
     if (thisUrlParameter) {
+      setIsLoading(true);
       const codeArray = thisUrlParameter.split('=');
 
       if (codeArray[0].indexOf('code') !== -1) {
@@ -64,6 +76,8 @@ function SignInPage() {
       } else {
         window.location.replace('/');
       }
+
+      setIsLoading(false);
     }
   }, []);
 
@@ -111,8 +125,8 @@ function SignInPage() {
       });
   }
 
-  return (
-    <Container>
+  const renderLoginButton = () => {
+    return (
       <div className="kakao-login-container">
         <div className="title-container">
           <img src={titleLogo} alt="마감을 사수하자" />
@@ -122,6 +136,21 @@ function SignInPage() {
         </div>
         <KakaoLogin />
       </div>
+    );
+  };
+
+  const renderLoading = () => {
+    return (
+      <div className="loading">
+        <CircularProgress size={100} />
+        <div className="logging">로그인 중...</div>
+      </div>
+    );
+  }
+
+  return (
+    <Container>
+      {IsLoading ? renderLoading() : renderLoginButton()}
     </Container>
   );
 }
