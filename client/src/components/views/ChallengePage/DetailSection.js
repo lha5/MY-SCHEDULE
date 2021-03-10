@@ -13,7 +13,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   padding: 0 calc(23%);
-  height: calc(100vh - 49px - 47px);
+  min-height: calc(100vh - 49px - 47px);
   justify-content: center;
   align-items: center;
 
@@ -23,6 +23,7 @@ const Container = styled.div`
     column-gap: 50px;
     justify-content: center;
     align-items: center;
+    margin: 25px 0;
 
     div.detail-info {
       display: flex;
@@ -37,19 +38,19 @@ const Container = styled.div`
     }
 
     div.apple-container {
-      border-left: 1px solid ${props => props.theme.colors.black};
+      border-left: 1px solid ${(props) => props.theme.colors.black};
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       margin: 0 auto;
 
       .each-apple {
         cursor: pointer;
-        border-right: 1px solid ${props => props.theme.colors.black};
-        border-bottom: 1px solid ${props => props.theme.colors.black};
+        border-right: 1px solid ${(props) => props.theme.colors.black};
+        border-bottom: 1px solid ${(props) => props.theme.colors.black};
         padding: 20px;
 
         &:hover {
-          background-color: ${props => props.theme.colors.primary};
+          background-color: ${(props) => props.theme.colors.primary};
         }
 
         &:nth-child(1),
@@ -57,13 +58,17 @@ const Container = styled.div`
         &:nth-child(3),
         &:nth-child(4),
         &:nth-child(5) {
-          border-top: 1px solid ${props => props.theme.colors.black};
+          border-top: 1px solid ${(props) => props.theme.colors.black};
+        }
+
+        img {
+          width: 70px;
         }
       }
 
       .done-apple {
         cursor: default;
-        background-color: ${props => props.theme.colors.gray};
+        background-color: ${(props) => props.theme.colors.gray};
 
         img {
           opacity: 0.5;
@@ -74,18 +79,51 @@ const Container = styled.div`
 
   @media only screen and (max-width: 1400px) {
     padding: 20px calc(20%);
+
+    div.render-box {
+      div.apple-container {
+        .each-apple {
+          padding: 15px;
+          
+          img {
+            width: 60px;
+          }
+        }
+      }
+    }
   }
 
-  @media ${props => props.theme.device.labtop} {
+  @media ${(props) => props.theme.device.labtop} {
     padding: 20px calc(15%);
   }
 
-  @media ${props => props.theme.device.tablet} {
-    flex-direction: column;
-    height: auto;
+  @media ${(props) => props.theme.device.tablet} {
+    padding: 20px calc(10%);
 
-    div.apple-container {
-      grid-template-columns: repeat(4, 1fr);
+    div.render-box {
+      flex-direction: column;
+
+      div.apple-container {
+        .each-apple {
+          padding: 12px;
+          
+          img {
+            width: 40px;
+          }
+        }
+      }
+    }
+  }
+
+  @media ${(props) => props.theme.device.mobile} {
+    div.render-box {
+
+      div.apple-container {
+        
+        .each-apple {
+          padding: 10px;
+        }
+      }
     }
   }
 `;
@@ -142,7 +180,7 @@ function DetailSection({ challengeId, Challenge, HowManyDone, getChallenge }) {
             }
             key={index + Challenge.title}
           >
-            <img src={AppleImage} alt="마감 사과" width="60px" id={apple} />
+            <img src={AppleImage} alt="마감 사과" id={apple} />
           </div>
         ))}
       </div>

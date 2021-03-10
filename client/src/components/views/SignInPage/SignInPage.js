@@ -13,7 +13,7 @@ const Container = styled.div`
   margin: 0 auto;
   padding: 0 calc(23%);
   justify-content: center;
-  height: calc(100vh - 71px - 48px);
+  min-height: calc(100vh - 71px - 48px);
 
   div.kakao-login-container {
     display: flex;
@@ -40,15 +40,13 @@ const Container = styled.div`
     padding: 0 calc(15%);
   }
 
-  /* div.bottom-section {
-    width: 100%;
-    text-align: center;
-    padding: 15px 0;
-    margin: 0 auto;
-    font-size: 12px;
-    border-top: 1px solid ${props => props.theme.colors.lightGray};
-    color: ${props => props.theme.colors.darkGray};
-  } */
+  @media ${props => props.theme.device.tablet} {
+    padding: 0 calc(10%);
+
+    div.kakao-login-container {
+      width: 80%;
+    }
+  }
 `;
 
 function SignInPage() {
@@ -94,7 +92,6 @@ function SignInPage() {
             )
             .then((response) => {
               if (response.status === 200) {
-                // localStorage.setItem('user_id', response.data.user_id);
                 localStorage.setItem('user_auth', response.data.user_auth);
                 localStorage.setItem('k_', response.data.k_);
 
@@ -125,9 +122,6 @@ function SignInPage() {
         </div>
         <KakaoLogin />
       </div>
-      {/* <div className="bottom-section">
-        LHA presents. © LHA ALL RIGHTS RESERVED SINCE 2021
-      </div> */}
     </Container>
   );
 }
