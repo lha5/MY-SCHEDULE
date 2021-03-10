@@ -14,10 +14,9 @@
 ## 사용한 기술
 #### `Server`
   - Node.js + Express.js
-  - MongoDB + Mongoose
+  - MongoDB Atlas + Mongoose
   - Kakao Login
   - jsonwebtoken
-  - MongoDB Atlas
   
 #### `Client`
   - React.js(CRA)
