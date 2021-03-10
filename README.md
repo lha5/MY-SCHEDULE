@@ -17,6 +17,7 @@
   - MongoDB + Mongoose
   - Kakao Login
   - jsonwebtoken
+  - MongoDB Atlas
   
 #### `Client`
   - React.js(CRA)
