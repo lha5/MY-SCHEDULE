@@ -1,6 +1,10 @@
-# :ledger: 내 마감을 지켜줘
+# :ledger: My Schedule - 내 마감을 지켜줘
   > 바쁜 창작자, 작가, 프리랜서를 위한 일정 관리 서비스 <br>
   > https://myschedule.kr
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/55972804/110795901-b230c280-82ba-11eb-907f-4491e7f069dc.png" width="400px" />
   
 <br>
 
