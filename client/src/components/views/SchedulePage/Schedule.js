@@ -10,13 +10,10 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 import swal from 'sweetalert';
 
 import {
-  getMySchedule,
   createScehdule,
   deleteSchedule,
   updateSchedule,
 } from './../../../apis/scheduleApi';
-
-import { getCalendarTheme } from './../../../apis/calendarApi';
 
 const Container = styled.div`
   div#menu {
@@ -192,7 +189,7 @@ const Container = styled.div`
   }
 `;
 
-function Schedule({ user, Calendars, setCalendars, Schedule, setSchedule, getSchedule }) {
+function Schedule({ user, CalendarData, Schedule, getSchedule }) {
   const [View, setView] = useState('month');
   const [ViewModeOptions, setViewModeOptions] = useState([
     {
@@ -217,12 +214,13 @@ function Schedule({ user, Calendars, setCalendars, Schedule, setSchedule, getSch
   }, [View]);
  
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
+    const { calendar } = scheduleData;
+
     const writer = user && user.userData ? user.userData._id : '';
 
     const mySchedule = {
       writer: writer,
       id: Math.floor(Math.random() * 101) + scheduleData.title,
-      calendarId: scheduleData.calendarId,
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
       start: scheduleData.start._date,
@@ -235,12 +233,15 @@ function Schedule({ user, Calendars, setCalendars, Schedule, setSchedule, getSch
       },
       state: scheduleData.state,
       attendees: scheduleData.attendees,
-      bgColor: scheduleData.bgColor,
-      body: scheduleData.body,
-      borderColor: scheduleData.borderColor,
-      color: scheduleData.color,
-      dragBgColor: scheduleData.dragBgColor
+      body: scheduleData.body
     };
+
+    if (calendar) {
+      mySchedule.calendarId = calendar.id;
+      mySchedule.color = calendar.color;
+      mySchedule.bgColor = calendar.bgColor;
+      mySchedule.borderColor = calendar.borderColor;
+    }
     
     createScehdule(mySchedule)
       .then(response => {
@@ -483,7 +484,7 @@ function Schedule({ user, Calendars, setCalendars, Schedule, setSchedule, getSch
           useCreationPopup={true}
           useDetailPopup={true}
           template={templates}
-          calendars={Calendars}
+          calendars={CalendarData}
           schedules={Schedule}
           disableDblClick={true}
           disableClick={false}

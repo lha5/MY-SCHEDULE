@@ -59,7 +59,7 @@ function SchedulePage({ user }) {
         console.error('error occured in SchedulePage.js - getMySchedule() ', error);
 
         swal({
-          title: '일정을 가져올 수 없습니다.',
+          title: '일정 구분을 가져올 수 없습니다.',
           text: '잠시 후 다시 시도해주세요'
         });
       });
@@ -71,9 +71,7 @@ function SchedulePage({ user }) {
       <ScheduleComponent
         user={user}
         Schedule={Schedule}
-        setSchedule={setSchedule}
-        Calendars={Calendars}
-        setCalendars={Calendars}
+        CalendarData={Calendars}
         getSchedule={getSchedule}
       />
     </Container>
