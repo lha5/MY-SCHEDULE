@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { withRouter } from 'react-router-dom';
 
 import styled from 'styled-components';
 import axios from 'axios';
@@ -97,8 +96,6 @@ function SignInPage() {
       )
       .then((response) => {
         if (response.status === 200) {
-          console.log('카카오 토큰 요청 성공');
-
           axios
             .post(
               `${process.env.REACT_APP_URI}${process.env.REACT_APP_USER_SERVER}/kakao/signin`,
@@ -155,4 +152,4 @@ function SignInPage() {
   );
 }
 
-export default withRouter(SignInPage);
+export default SignInPage;

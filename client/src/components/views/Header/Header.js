@@ -21,7 +21,7 @@ const Container = styled.div`
     display: flex;
     margin-right: 20px;
     white-space: nowrap;
-    font-size: 19px;
+    font-size: 20px;
 
     a {
       font-weight: 900;
