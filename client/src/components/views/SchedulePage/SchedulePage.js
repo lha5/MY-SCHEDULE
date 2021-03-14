@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 import swal from 'sweetalert';
@@ -26,12 +27,14 @@ const Container = styled.div`
   }
 `;
 
-function SchedulePage({ user }) {
+function SchedulePage() {
+  const user = useSelector(state => state.user);
+
   const [Schedule, setSchedule] = useState([]);
   const [Calendars, setCalendars] = useState([]);
 
   useEffect(() => {
-    if (user && user.userData && user.userData.isAuth === true) {
+    if (user && user.userData && user.userData.isAuth) {
       getSchedule();
       getCalendar();
     }
@@ -82,7 +85,6 @@ function SchedulePage({ user }) {
         Calendars={Calendars}
         setCalendars={setCalendars}
         getCalendar={getCalendar}
-        user={user}
       />
       <ScheduleComponent
         Schedule={Schedule}

@@ -6,7 +6,7 @@ import { CirclePicker } from 'react-color';
 import swal from 'sweetalert';
 import { DeleteOutlined } from '@material-ui/icons';
 
-import { getLastId, createCalendarTheme, getCalendarTheme, deleteCalendarTheme } from '../../../../apis/calendarApi';
+import { getLastId, createCalendarTheme, getCalendarTheme, deleteCalendarTheme, checkCalendarTheme } from '../../../../apis/calendarApi';
 
 const Container = styled.div`
   width: 600px;
@@ -228,6 +228,20 @@ function CalendarEditor({ setCalendars }) {
       });
   }
 
+  const checkBoforeTheme = async (delId) => {
+    let result;
+    
+    await checkCalendarTheme(delId)
+      .then(response => {
+        result = response.data.result;
+      })
+      .catch(error => {
+        console.error('error occured in CalendarEditor.js - checkBoforeTheme() ', error);
+      });
+
+    return result;
+  }
+
   const handleDelete = (delId) => {
     const target = delId;
 
@@ -235,20 +249,30 @@ function CalendarEditor({ setCalendars }) {
       title: '일정 구분을 삭제하시겠습니까?',
       icon: 'warning',
       buttons: ['취소', '삭제']
-    }).then(value => {
+    }).then(async (value) => {
       if (value) {
-        deleteCalendarTheme(target)
-          .then(response => {
-            getTheme();
-          })
-          .catch(error => {
-            console.error('error occured in CalendarEditor.js - handleDelete(event) ', error);
+        const checkResult = await checkBoforeTheme(target);
 
-            swal({
-              title: '일정 구분을 삭제할 수 없습니다.',
-              icon: 'error'
+        if (checkResult) {
+          deleteCalendarTheme(target)
+            .then(response => {
+              getTheme();
+            })
+            .catch(error => {
+              console.error('error occured in CalendarEditor.js - handleDelete(event) ', error);
+  
+              swal({
+                title: '일정 구분을 삭제할 수 없습니다.',
+                icon: 'error'
+              });
             });
-          });
+        } else {
+          swal({
+            title: '일정 구분을 삭제할 수 없습니다.',
+            text: '기존에 사용 중인 일정 구분입니다.',
+            icon: 'warning'
+          }).then(() => false);
+        }
       } else {
         return false;
       }

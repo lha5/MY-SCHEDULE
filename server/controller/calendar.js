@@ -1,4 +1,5 @@
 const { Calendar } = require('../models/Calendar');
+const { Schedule } = require('../models/Schedule');
 
 exports.getMyCalendarTheme = async (req, res, next) => {
   try {
@@ -85,11 +86,23 @@ exports.deleteCalendarTheme = async (req, res, next) => {
   }
 }
 
-exports.updateCalendarTheme = async (req, res, next) => {
+exports.checkDeleteCalendarTheme = async (req, res, next) => {
   try {
     const user = req.user._id;
 
     const id = req.query.id;
+
+    Schedule.find({ writer: user, calendarId: id }, (err, schedule) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'fail to check for delete calendar', err });
+      }
+
+      if (schedule.length < 1) {
+        res.status(200).json({ success: true, result: true });
+      } else {
+        res.status(200).json({ success: true, result: false });
+      }
+    });
   } catch (error) {
     next(error);
   }

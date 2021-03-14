@@ -57,9 +57,8 @@ const CustomCheckbox = styled.div`
   }
 `;
 
-function MyCalendarTheme({ CalendarData }) {  
-
-  const renderTheme = CalendarData && CalendarData.map((theme, index) => (
+function MyCalendarTheme({ Calendars }) {
+  const renderTheme = Calendars && Calendars.map((theme, index) => (
     <CustomCheckbox key={theme.id + theme.name} whichColor={theme.bgColor}>
       <input type="checkbox" value={theme.id} id={theme.id + theme.name} disabled />
       <label htmlFor={theme.id + theme.name} />

@@ -26,6 +26,6 @@ export function deleteCalendarTheme(scheduleId) {
   return axios.delete(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CALENDAR_SERVER}/delete?id=${scheduleId}`, config());
 }
 
-export function updateCalendarTheme(scheduleId, dataToSubmit) {
-  return axios.patch(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CALENDAR_SERVER}/update?id=${scheduleId}`, dataToSubmit, config());
+export function checkCalendarTheme(scheduleId) {
+  return axios.get(`${process.env.REACT_APP_URI}${process.env.REACT_APP_CALENDAR_SERVER}/check?id=${scheduleId}`, config());
 }

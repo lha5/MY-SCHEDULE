@@ -16,6 +16,6 @@ router.post('/', auth, CalendarController.createMyCalendarTheme);
 
 router.delete('/delete', auth, CalendarController.deleteCalendarTheme);
 
-router.patch('/update', auth, CalendarController.updateCalendarTheme);
+router.get('/check', auth, CalendarController.checkDeleteCalendarTheme);
 
 module.exports = router;

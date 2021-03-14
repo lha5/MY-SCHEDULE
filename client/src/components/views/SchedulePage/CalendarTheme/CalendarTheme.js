@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
@@ -65,43 +66,18 @@ const Container = styled.div`
   }
 `;
 
-function Calendar({ Calendars, setCalendars, getCalendar, user }) {
+function Calendar({ Calendars, setCalendars, getCalendar }) {
+  const user = useSelector(state => state.user);
+
   const classes = useStyles();
 
   const [Open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (user && user.userData && user.userData.isAuth === true) {
-      getCalendarData();
+    if (user.userData && user.userData.isAuth) {
+      getCalendar();
     }
-  }, []);
-
-  const getCalendarData = () => {
-    getCalendarTheme()
-      .then((response) => {
-        let temp = response.data.data;
-        if (temp[0].id === 0) {
-          setCalendars(temp);
-        } else {
-          for (const data of temp) {
-            data.id = String(data.id);
-          }
-          
-          setCalendars(temp);
-        }
-      })
-      .catch((error) => {
-        console.error(
-          'error occured in MyCalendarTheme.js - getCalendarTheme() ',
-          error
-        );
-
-        swal({
-          title: '일정 구분을 불러올 수 없습니다.',
-          icon: 'error',
-        });
-      });
-  };
+  }, [user]);
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -121,7 +97,7 @@ function Calendar({ Calendars, setCalendars, getCalendar, user }) {
 
   return (
     <Container>
-      <MyCalendarTheme CalendarData={Calendars} />
+      <MyCalendarTheme Calendars={Calendars} />
       <div className="btn-box">
         {Calendars.length > 0 && Calendars[0].id === 0 && gestureTry()}
         <button
