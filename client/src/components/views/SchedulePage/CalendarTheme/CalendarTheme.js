@@ -65,13 +65,15 @@ const Container = styled.div`
   }
 `;
 
-function Calendar({ Calendars, setCalendars, getCalendar }) {
+function Calendar({ Calendars, setCalendars, getCalendar, user }) {
   const classes = useStyles();
 
   const [Open, setOpen] = useState(false);
 
   useEffect(() => {
-    getCalendarData();
+    if (user && user.userData && user.userData.isAuth === true) {
+      getCalendarData();
+    }
   }, []);
 
   const getCalendarData = () => {
@@ -95,7 +97,7 @@ function Calendar({ Calendars, setCalendars, getCalendar }) {
         );
 
         swal({
-          title: '캘린더 테마를 불러올 수 없습니다.',
+          title: '일정 구분을 불러올 수 없습니다.',
           icon: 'error',
         });
       });

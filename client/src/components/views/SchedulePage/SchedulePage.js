@@ -26,13 +26,15 @@ const Container = styled.div`
   }
 `;
 
-function SchedulePage() {
+function SchedulePage({ user }) {
   const [Schedule, setSchedule] = useState([]);
   const [Calendars, setCalendars] = useState([]);
 
   useEffect(() => {
-    getSchedule();
-    getCalendar();
+    if (user && user.userData && user.userData.isAuth === true) {
+      getSchedule();
+      getCalendar();
+    }
   }, []);
   
   const getSchedule = () => {
@@ -80,6 +82,7 @@ function SchedulePage() {
         Calendars={Calendars}
         setCalendars={setCalendars}
         getCalendar={getCalendar}
+        user={user}
       />
       <ScheduleComponent
         Schedule={Schedule}
