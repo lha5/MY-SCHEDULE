@@ -14,7 +14,9 @@ exports.getMySchedule = async (req, res, next) => {
 
 exports.createSchedule = async (req, res, next) => {
   try {
-    const data = req.body;
+    let data = req.body;
+    const writer = req.user._id;
+    data.writer = writer;
 
     const newSchedule = new Schedule(data);
 

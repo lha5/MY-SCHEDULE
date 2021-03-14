@@ -189,7 +189,7 @@ const Container = styled.div`
   }
 `;
 
-function Schedule({ user, CalendarData, Schedule, getSchedule }) {
+function Schedule({ Calendars, Schedule, getSchedule }) {
   const [View, setView] = useState('month');
   const [ViewModeOptions, setViewModeOptions] = useState([
     {
@@ -214,39 +214,26 @@ function Schedule({ user, CalendarData, Schedule, getSchedule }) {
   }, [View]);
  
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
-    const { calendar } = scheduleData;
-
-    const writer = user && user.userData ? user.userData._id : '';
+    console.log('1111111111 ', scheduleData);
+    console.log('2222222222 ', cal.current.calendarInst);
 
     const mySchedule = {
-      writer: writer,
       id: Math.floor(Math.random() * 101) + scheduleData.title,
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
       start: scheduleData.start._date,
       end: scheduleData.end._date,
       category: scheduleData.isAllDay ? 'allday' : 'time',
-      dueDateClass: '',
       location: scheduleData.location,
       raw: {
         class: scheduleData.raw['class'],
       },
       state: scheduleData.state,
-      attendees: scheduleData.attendees,
-      body: scheduleData.body
+      calendarId: scheduleData.calendarId
     };
-
-    if (calendar) {
-      mySchedule.calendarId = calendar.id;
-      mySchedule.color = calendar.color;
-      mySchedule.bgColor = calendar.bgColor;
-      mySchedule.borderColor = calendar.borderColor;
-    }
     
     createScehdule(mySchedule)
       .then(response => {
-        delete mySchedule.writer;
-
         cal.current.calendarInst.createSchedules([mySchedule]);
         
         getSchedule();
@@ -290,8 +277,8 @@ function Schedule({ user, CalendarData, Schedule, getSchedule }) {
     });
   }, []);
 
-  const onBeforeUpdateSchedule = useCallback((e) => {
-    const { schedule, changes } = e;
+  const onBeforeUpdateSchedule = useCallback((event) => {
+    const { schedule, changes } = event;
 
     if (changes.end || changes.start) {
       changes.end = changes.end._date;
@@ -484,10 +471,8 @@ function Schedule({ user, CalendarData, Schedule, getSchedule }) {
           useCreationPopup={true}
           useDetailPopup={true}
           template={templates}
-          calendars={CalendarData}
+          calendars={Calendars}
           schedules={Schedule}
-          disableDblClick={true}
-          disableClick={false}
           onBeforeCreateSchedule={onBeforeCreateSchedule}
           onBeforeDeleteSchedule={onBeforeDeleteSchedule}
           onBeforeUpdateSchedule={onBeforeUpdateSchedule}

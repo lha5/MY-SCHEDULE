@@ -26,7 +26,7 @@ const Container = styled.div`
   }
 `;
 
-function SchedulePage({ user }) {
+function SchedulePage() {
   const [Schedule, setSchedule] = useState([]);
   const [Calendars, setCalendars] = useState([]);
 
@@ -53,7 +53,11 @@ function SchedulePage({ user }) {
   const getCalendar = () => {
     getCalendarTheme()
       .then(response => {
-        setCalendars(response.data.data);
+        let temp = response.data.data;
+        for (const data of temp) {
+          data.id = String(data.id);
+        }
+        setCalendars(temp);
       })
       .catch(error => {
         console.error('error occured in SchedulePage.js - getMySchedule() ', error);
@@ -69,9 +73,8 @@ function SchedulePage({ user }) {
     <Container>
       <CalendarComponent Calendars={Calendars} setCalendars={setCalendars} getCalendar={getCalendar} />
       <ScheduleComponent
-        user={user}
         Schedule={Schedule}
-        CalendarData={Calendars}
+        Calendars={Calendars}
         getSchedule={getSchedule}
       />
     </Container>
