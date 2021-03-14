@@ -61,7 +61,7 @@ const Container = styled.div`
       }
     }
 
-    tbody > tr:hover {
+    tbody > tr svg {
       cursor: pointer;
     }
 

@@ -103,7 +103,7 @@ const Container = styled.div`
     border-top: none;
     background: ${(props) => props.isOnlyExample && 'white'};
     z-index: ${(props) => props.isOnlyExample && '1000'};
-    opacity: 0.5;
+    opacity: ${(props) => props.isOnlyExample ? '0.5' : '1'};
 
     & > div {
       height: 800px !important;
@@ -435,7 +435,7 @@ function Schedule({ Calendars, Schedule, getSchedule }) {
   }
 
   return (
-    <Container isOnlyExample={Calendars.length === 1 && Calendars[0].id === 0 ? true : false}>
+    <Container isOnlyExample={Calendars[0].id === 0 ? true : false}>
       <div id="menu">
         <div className="render-range-mobile">{DateRange}</div>
         <div className="menu-navi">
@@ -479,7 +479,7 @@ function Schedule({ Calendars, Schedule, getSchedule }) {
         <Calendar
           ref={cal}
           view={View}
-          isReadOnly={Calendars.length > 0 && Calendars[0].id === 0 && true}
+          isReadOnly={Calendars[0].id === 0 && true}
           useCreationPopup={true}
           useDetailPopup={true}
           template={templates}
