@@ -75,8 +75,6 @@ function SignInPage() {
       } else {
         window.location.replace('/');
       }
-
-      setIsLoading(false);
     }
   }, []);
 
