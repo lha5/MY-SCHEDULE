@@ -9,7 +9,7 @@ import swal from 'sweetalert';
 import { getCalendarTheme } from '../../../../apis/calendarApi';
 
 import MyCalendarTheme from './MyCalendarTheme';
-import CalendarEditor from './CalendarEditor';
+import CalendarEditor from './CalendarThemeEditor';
 
 const useStyles = makeStyles(() => ({
   modal: {

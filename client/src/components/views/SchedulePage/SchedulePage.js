@@ -8,7 +8,7 @@ import { getMySchedule } from './../../../apis/scheduleApi';
 import { getCalendarTheme } from './../../../apis/calendarApi';
 
 import ScheduleComponent from './Schedule';
-import CalendarComponent from './Calendar/Calendar';
+import CalendarComponent from './CalendarTheme/CalendarTheme';
 
 const Container = styled.div`
   display: flex;

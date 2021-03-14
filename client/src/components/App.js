@@ -9,7 +9,7 @@ import Header from './views/Header/Header';
 import SignInPage from './views/SignInPage/SignInPage';
 import LandingPage from './views/LandingPage/LandingPage';
 import MyPage from './views/MyPage/MyPage';
-import SchedulePage from './views/SchedulePage/SchedulePage';
+import SchedulePage from './views/SchedulePage/Schedule/Index';
 import ChallengePage from './views/ChallengePage/ChallengePage';
 import DetailChallenge from './views/ChallengePage/DetailChallenge';
 import Footer from './views/Footer/Footer';
