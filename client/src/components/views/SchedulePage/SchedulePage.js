@@ -54,10 +54,15 @@ function SchedulePage() {
     getCalendarTheme()
       .then(response => {
         let temp = response.data.data;
-        for (const data of temp) {
-          data.id = String(data.id);
+        if (temp[0].id === 0) {
+          setCalendars(temp);
+        } else {
+          for (const data of temp) {
+            data.id = String(data.id);
+          }
+          
+          setCalendars(temp);
         }
-        setCalendars(temp);
       })
       .catch(error => {
         console.error('error occured in SchedulePage.js - getMySchedule() ', error);
@@ -71,7 +76,11 @@ function SchedulePage() {
 
   return (
     <Container>
-      <CalendarComponent Calendars={Calendars} setCalendars={setCalendars} getCalendar={getCalendar} />
+      <CalendarComponent
+        Calendars={Calendars}
+        setCalendars={setCalendars}
+        getCalendar={getCalendar}
+      />
       <ScheduleComponent
         Schedule={Schedule}
         Calendars={Calendars}

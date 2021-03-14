@@ -144,8 +144,18 @@ function CalendarEditor({ setCalendars }) {
   const getTheme = () => {
     getCalendarTheme()
       .then(response => {
-        setCalTheme(response.data.data);
-        setCalendars(CalTheme);
+        let temp = response.data.data;
+        if (temp[0].id === 0) {
+          setCalTheme(temp);
+          setCalendars(temp);
+        } else {
+          for (const data of temp) {
+            data.id = String(data.id);
+          }
+          
+          setCalTheme(temp);
+          setCalendars(temp);
+        }
       })
       .catch(error => {
         console.error('error occured in MyCalendarTheme.js - getCalendarTheme() ', error);
@@ -218,8 +228,8 @@ function CalendarEditor({ setCalendars }) {
       });
   }
 
-  const handleDelete = (event) => {
-    const target = event.target.id;
+  const handleDelete = (delId) => {
+    const target = delId;
 
     swal({
       title: '일정 구분을 삭제하시겠습니까?',
@@ -246,29 +256,38 @@ function CalendarEditor({ setCalendars }) {
   }
 
   const renderList = CalTheme.map((theme, index) => (
-    <MyTheme coloring={theme.bgColor} key={theme.id + theme.name}>
-      <div className="theme-container">
-        <div className="color-palette" />
-        <div id={theme.id} className="theme-name">{theme.name}</div>
-      </div>
-      {theme.id !== 0 && <div onClick={handleDelete}><DeleteOutlined id={theme.id} /></div>}
-    </MyTheme>
-  ));
-
-  const renderNotice = () => {
-    return (
-      <TryAddYours>
-        <div className="gesture">👉</div>
-        <div className="notice">
-          오른쪽에서<br/> 일정 구분을<br/> 추가하세요!
+    <>
+      <MyTheme coloring={theme.bgColor} key={theme.id + theme.name}>
+        <div className="theme-container">
+          <div className="color-palette" />
+          <div id={theme.id} className="theme-name">
+            {theme.name}
+          </div>
         </div>
-      </TryAddYours>
-    );
-  }
+        {theme.id !== 0 && (
+          <div onClick={() => handleDelete(theme.id)}>
+            <DeleteOutlined id={theme.id} />
+          </div>
+        )}
+      </MyTheme>
+      {theme.id === 0 && (
+        <TryAddYours>
+          <div className="gesture">👉</div>
+          <div className="notice">
+            오른쪽에서
+            <br /> 일정 구분을
+            <br /> 추가하세요!
+          </div>
+        </TryAddYours>
+      )}
+    </>
+  ));
 
   return (
     <Container>
-      <div className="delete-list">{CalTheme.length > 0 ? renderList : renderNotice()}</div>
+      <div className="delete-list">
+        {CalTheme.length > 0 && renderList}
+      </div>
       <div className="form-section">
         <form onSubmit={createTheme}>
           <div className="how-to"><span className="gesture">☝️</span> 일정을 구분할 이름을 입력하세요.</div>

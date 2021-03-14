@@ -78,9 +78,10 @@ const Container = styled.div`
     }
 
     div.render-range {
-      font-size: 21px;
+      font-size: 22px;
       vertical-align: middle;
-      font-weight: 500;
+      font-weight: bold;
+      user-select: none;
     }
 
     div.select-box {
@@ -89,6 +90,7 @@ const Container = styled.div`
       align-items: center;
 
       select {
+        cursor: pointer;
         border: 1px solid #bbbbbb;
         border-radius: 5px;
         padding: 3px 7px;
@@ -99,9 +101,13 @@ const Container = styled.div`
   div.calendar-container {
     border: 1px solid #e5e5e5;
     border-top: none;
+    background: ${(props) => props.isOnlyExample && 'white'};
+    z-index: ${(props) => props.isOnlyExample && '1000'};
+    opacity: 0.5;
 
-    div.calendar-container > div {
+    & > div {
       height: 800px !important;
+      cursor: ${(props) => (props.isOnlyExample ? 'not-allowed' : 'pointer')};
     }
 
     .tui-full-calendar-month {
@@ -109,7 +115,7 @@ const Container = styled.div`
     }
 
     .tui-full-calendar-weekday-grid-line:hover {
-      cursor: pointer;
+      cursor: ${(props) => (props.isOnlyExample ? 'not-allowed' : 'pointer')};
     }
 
     .tui-full-calendar-section-allday {
@@ -159,8 +165,8 @@ const Container = styled.div`
     div#menu {
       grid-template-columns: none;
       grid-template-areas:
-        "top-area top-area"
-        "a b";
+        'top-area top-area'
+        'a b';
 
       div.render-range-mobile {
         display: flex;
@@ -214,9 +220,6 @@ function Schedule({ Calendars, Schedule, getSchedule }) {
   }, [View]);
  
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
-    console.log('1111111111 ', scheduleData);
-    console.log('2222222222 ', cal.current.calendarInst);
-
     const mySchedule = {
       id: Math.floor(Math.random() * 101) + scheduleData.title,
       title: scheduleData.title,
@@ -406,15 +409,23 @@ function Schedule({ Calendars, Schedule, getSchedule }) {
   }
 
   const onClickNavi = (event) => {
-    if (event.target.tagName === 'BUTTON') {
+    if (event.target.tagName === 'BUTTON' || event.target.tagName === 'svg') {
       const { target } = event;
 
       let action = target.dataset ? target.dataset.action : target.getAttribute('data-action');
       action = action.replace('move-', '');
 
       cal.current.calendarInst[action]();
-      setRenderRangeText();
+    } else {
+      const { currentTarget } = event;
+
+      let action = currentTarget.dataset ? currentTarget.dataset.action : currentTarget.getAttribute('data-action');
+      action = action.replace('move-', '');
+
+      cal.current.calendarInst[action]();
     }
+
+    setRenderRangeText();
   }
 
   const onChangeSelect = (event) => {
@@ -424,7 +435,7 @@ function Schedule({ Calendars, Schedule, getSchedule }) {
   }
 
   return (
-    <Container>
+    <Container isOnlyExample={Calendars.length === 1 && Calendars[0].id === 0 ? true : false}>
       <div id="menu">
         <div className="render-range-mobile">{DateRange}</div>
         <div className="menu-navi">
@@ -442,7 +453,7 @@ function Schedule({ Calendars, Schedule, getSchedule }) {
             data-action="move-prev"
             onClick={onClickNavi}
           >
-            <ArrowBackIosOutlined />
+            <ArrowBackIosOutlined data-action="move-prev" />
           </button>
           <button
             type="button"
@@ -450,7 +461,7 @@ function Schedule({ Calendars, Schedule, getSchedule }) {
             data-action="move-next"
             onClick={onClickNavi}
           >
-            <ArrowForwardIosOutlined />
+            <ArrowForwardIosOutlined data-action="move-next" />
           </button>
         </div>
         <div className="render-range">{DateRange}</div>
@@ -468,6 +479,7 @@ function Schedule({ Calendars, Schedule, getSchedule }) {
         <Calendar
           ref={cal}
           view={View}
+          isReadOnly={Calendars.length > 0 && Calendars[0].id === 0 && true}
           useCreationPopup={true}
           useDetailPopup={true}
           template={templates}
