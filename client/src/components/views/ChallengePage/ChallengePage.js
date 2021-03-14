@@ -33,7 +33,7 @@ function ChallengePage({ user }) {
     if (user && user.userData && user.userData.isAuth === true) {
       getChallenge();
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (user && user.userData && user.userData.isAuth === true) {

@@ -38,7 +38,7 @@ function SchedulePage() {
       getSchedule();
       getCalendar();
     }
-  }, []);
+  }, [user]);
   
   const getSchedule = () => {
     getMySchedule()
